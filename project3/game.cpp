@@ -25,9 +25,11 @@ Game::Game(QWidget *parent) :
     pic[5]=green;pic[6]=blue;pic[7]=purple;pic[8]=de_around;
     pic[9]=de_column;pic[10]=de_row;pic[11]=de_same_color;
 
-    signalMapper = new QSignalMapper(this);
+
+//connect button click
     {
-    //connect button click
+
+        signalMapper = new QSignalMapper(this);
 
         connect(ui->pb000, SIGNAL(clicked()), signalMapper, SLOT(map ()));        signalMapper->setMapping (ui->pb000,0);
         connect(ui->pb001, SIGNAL(clicked()), signalMapper, SLOT(map ()));        signalMapper->setMapping (ui->pb001,1);
@@ -233,7 +235,7 @@ Game::Game(QWidget *parent) :
         connect(signalMapper, SIGNAL(mapped (int)), this, SLOT(doClicked(int)));
     }
 
-
+    game_lock=0;
     giveStartBlock(2);
 
     myShow();
@@ -630,11 +632,11 @@ void Game::doEliminate(int x){
             }
         }
     }
-    show();
+    resetElm(x);
 }
 void Game::checkClick(int x){
     int count_clicked=0;
-    int x1,x2,y1,y2,z1,z2;
+    int x1=-1,x2=-1,y1=-1,y2=-1,z1=-1,z2=-1;
     for(int i=0;i<10;i++){
         for(int j=0;j<10;j++){
             if(pb[x][i][j].click==1){
@@ -657,24 +659,25 @@ void Game::checkClick(int x){
     std::cout<<"check"<<x1<<" "<<y1<<" "<<z1<<" && "<<x2<<" "<<y2<<" "<<z2<<"\n";
     if(count_clicked!=2){
         std::cout<<"only one clicked\n";
+        game_lock=0;
         return;
     }
     if(x1!=x2){
         std::cout<<"x1!=x2\n";
         resetClick(x);
+        game_lock=0;
         return;
     }
 
     else if(abs(y1-y2)+abs(z1-z2)>1){
         std::cout<<"cant change\n";
         resetClick(x);
+        game_lock=0;
         return;
     }
     else{
-        doChaange(x1,y1,z1,x2,y2,z2);
-        checkEliminate(x,1);
-        doEliminate(x);
-        resetClick(x);
+        doChange(x1,y1,z1,x2,y2,z2);
+        doFall(x1);
     }
 }
 
@@ -686,14 +689,706 @@ void Game::resetClick(int x){
     }
 }
 
-void Game::doChaange(int x1,int y1,int z1,int x2,int y2,int z2){
+void Game::resetElm(int x){
+    for(int i=0;i<10;i++){
+        for(int j=0;j<10;j++){
+            pb[x][i][j].elm=0;
+        }
+    }
+}
+
+void Game::doChange(int x1,int y1,int z1,int x2,int y2,int z2){
     std::cout<<"change"<<x1<<" "<<y1<<" "<<z1<<" && "<<x2<<" "<<y2<<" "<<z2<<"\n";
-    int temp;
-    temp=pb[x1][y1][z1].pic;
-    pb[x1][y1][z1].pic=pb[x2][y2][z2].pic;
-    pb[x2][y2][z2].pic=temp;
+    doAnimation(x1,y1,z1,x2,y2,z2);
     resetClick(x1);
     myShow();
+}
+
+void Game::doFall(int x){
+    std::cout<<"doFall\n";
+    int b1=0;//b=0 no falling block
+    for(int i=0;i<10;i++){
+        bool processed_pos[10]={0};//processed:1
+        int from_pos[10]={0};
+        for(int j=9;j>0;j--){
+            if(pb[x][j][i].pic==0){
+                b1=1;
+            };
+            int temp=0;
+            for(int k=j;k>=0;k--){
+                if(pb[x][k][i].pic!=0&&processed_pos[k]==0){
+                    temp=k;
+                    processed_pos[k]=1;
+                    break;
+                }
+            }
+            from_pos[j]=temp;
+        }
+        for(int j=9;j>=0;j--){
+            if(j!=from_pos[j])
+                doAnimation(x,j,i,x,from_pos[j],i,1);
+        }
+        if(processed_pos[0]==1||pb[x][0][i].pic==0){
+            doAnimation(x,0,i,x,0,i,2);
+            if(pb[x][0][i].pic==0)
+                b1=1;
+        };
+    }
+    if(b1==0){
+        game_lock=0;
+        std::cout<<"endmove\n";
+    }
+}
+
+//type 0: change    1:fall  2: column 0
+void Game::doAnimation(int x1,int y1,int z1,int x2,int y2,int z2,int type){
+    std::cout<<" x1: "<<x1<<" y1: "<<y1<<" z1: "<<z1<<" x2: "<<x2<<" y2: "<<y2<<" z2: "<<z2<<" type: "<<type<<"\n";
+    //game_lock=1;
+    QPushButton *p1,*p2;
+    int temp;
+
+
+    {
+        switch(x1){
+            case 0:{
+                switch(y1){
+                case 0:
+                    switch(z1){
+                        case 0:p1=ui->pb000;break;
+                        case 1:p1=ui->pb001;break;
+                        case 2:p1=ui->pb002;break;
+                        case 3:p1=ui->pb003;break;
+                        case 4:p1=ui->pb004;break;
+                        case 5:p1=ui->pb005;break;
+                        case 6:p1=ui->pb006;break;
+                        case 7:p1=ui->pb007;break;
+                        case 8:p1=ui->pb008;break;
+                        case 9:p1=ui->pb009;break;
+                    }break;
+                case 1:
+                    switch(z1){
+                        case 0:p1=ui->pb010;break;
+                        case 1:p1=ui->pb011;break;
+                        case 2:p1=ui->pb012;break;
+                        case 3:p1=ui->pb013;break;
+                        case 4:p1=ui->pb014;break;
+                        case 5:p1=ui->pb015;break;
+                        case 6:p1=ui->pb016;break;
+                        case 7:p1=ui->pb017;break;
+                        case 8:p1=ui->pb018;break;
+                        case 9:p1=ui->pb019;break;
+                    }break;
+                case 2:
+                    switch(z1){
+                        case 0:p1=ui->pb020;break;
+                        case 1:p1=ui->pb021;break;
+                        case 2:p1=ui->pb022;break;
+                        case 3:p1=ui->pb023;break;
+                        case 4:p1=ui->pb024;break;
+                        case 5:p1=ui->pb025;break;
+                        case 6:p1=ui->pb026;break;
+                        case 7:p1=ui->pb027;break;
+                        case 8:p1=ui->pb028;break;
+                        case 9:p1=ui->pb029;break;
+                    }break;
+                case 3:
+                    switch(z1){
+                        case 0:p1=ui->pb030;break;
+                        case 1:p1=ui->pb031;break;
+                        case 2:p1=ui->pb032;break;
+                        case 3:p1=ui->pb033;break;
+                        case 4:p1=ui->pb034;break;
+                        case 5:p1=ui->pb035;break;
+                        case 6:p1=ui->pb036;break;
+                        case 7:p1=ui->pb037;break;
+                        case 8:p1=ui->pb038;break;
+                        case 9:p1=ui->pb039;break;
+                    }break;
+                case 4:
+                    switch(z1){
+                        case 0:p1=ui->pb040;break;
+                        case 1:p1=ui->pb041;break;
+                        case 2:p1=ui->pb042;break;
+                        case 3:p1=ui->pb043;break;
+                        case 4:p1=ui->pb044;break;
+                        case 5:p1=ui->pb045;break;
+                        case 6:p1=ui->pb046;break;
+                        case 7:p1=ui->pb047;break;
+                        case 8:p1=ui->pb048;break;
+                        case 9:p1=ui->pb049;break;
+                    }break;
+                case 5:
+                    switch(z1){
+                        case 0:p1=ui->pb050;break;
+                        case 1:p1=ui->pb051;break;
+                        case 2:p1=ui->pb052;break;
+                        case 3:p1=ui->pb053;break;
+                        case 4:p1=ui->pb054;break;
+                        case 5:p1=ui->pb055;break;
+                        case 6:p1=ui->pb056;break;
+                        case 7:p1=ui->pb057;break;
+                        case 8:p1=ui->pb058;break;
+                        case 9:p1=ui->pb059;break;
+                    }break;
+                case 6:
+                    switch(z1){
+                        case 0:p1=ui->pb060;break;
+                        case 1:p1=ui->pb061;break;
+                        case 2:p1=ui->pb062;break;
+                        case 3:p1=ui->pb063;break;
+                        case 4:p1=ui->pb064;break;
+                        case 5:p1=ui->pb065;break;
+                        case 6:p1=ui->pb066;break;
+                        case 7:p1=ui->pb067;break;
+                        case 8:p1=ui->pb068;break;
+                        case 9:p1=ui->pb069;break;
+                    }break;
+                case 7:
+                    switch(z1){
+                        case 0:p1=ui->pb070;break;
+                        case 1:p1=ui->pb071;break;
+                        case 2:p1=ui->pb072;break;
+                        case 3:p1=ui->pb073;break;
+                        case 4:p1=ui->pb074;break;
+                        case 5:p1=ui->pb075;break;
+                        case 6:p1=ui->pb076;break;
+                        case 7:p1=ui->pb077;break;
+                        case 8:p1=ui->pb078;break;
+                        case 9:p1=ui->pb079;break;
+                    }break;
+                case 8:
+                    switch(z1){
+                        case 0:p1=ui->pb080;break;
+                        case 1:p1=ui->pb081;break;
+                        case 2:p1=ui->pb082;break;
+                        case 3:p1=ui->pb083;break;
+                        case 4:p1=ui->pb084;break;
+                        case 5:p1=ui->pb085;break;
+                        case 6:p1=ui->pb086;break;
+                        case 7:p1=ui->pb087;break;
+                        case 8:p1=ui->pb088;break;
+                        case 9:p1=ui->pb089;break;
+                    }break;
+                case 9:
+                    switch(z1){
+                        case 0:p1=ui->pb090;break;
+                        case 1:p1=ui->pb091;break;
+                        case 2:p1=ui->pb092;break;
+                        case 3:p1=ui->pb093;break;
+                        case 4:p1=ui->pb094;break;
+                        case 5:p1=ui->pb095;break;
+                        case 6:p1=ui->pb096;break;
+                        case 7:p1=ui->pb097;break;
+                        case 8:p1=ui->pb098;break;
+                        case 9:p1=ui->pb099;break;
+                    }break;
+                }
+            }break;
+            case 1:{
+                switch(y1){
+                case 0:
+                    switch(z1){
+                        case 0:p1=ui->pb100;break;
+                        case 1:p1=ui->pb101;break;
+                        case 2:p1=ui->pb102;break;
+                        case 3:p1=ui->pb103;break;
+                        case 4:p1=ui->pb104;break;
+                        case 5:p1=ui->pb105;break;
+                        case 6:p1=ui->pb106;break;
+                        case 7:p1=ui->pb107;break;
+                        case 8:p1=ui->pb108;break;
+                        case 9:p1=ui->pb109;break;
+                    }break;
+                case 1:
+                    switch(z1){
+                        case 0:p1=ui->pb110;break;
+                        case 1:p1=ui->pb111;break;
+                        case 2:p1=ui->pb112;break;
+                        case 3:p1=ui->pb113;break;
+                        case 4:p1=ui->pb114;break;
+                        case 5:p1=ui->pb115;break;
+                        case 6:p1=ui->pb116;break;
+                        case 7:p1=ui->pb117;break;
+                        case 8:p1=ui->pb118;break;
+                        case 9:p1=ui->pb119;break;
+                    }break;
+                case 2:
+                    switch(z1){
+                        case 0:p1=ui->pb120;break;
+                        case 1:p1=ui->pb121;break;
+                        case 2:p1=ui->pb122;break;
+                        case 3:p1=ui->pb123;break;
+                        case 4:p1=ui->pb124;break;
+                        case 5:p1=ui->pb125;break;
+                        case 6:p1=ui->pb126;break;
+                        case 7:p1=ui->pb127;break;
+                        case 8:p1=ui->pb128;break;
+                        case 9:p1=ui->pb129;break;
+                    }break;
+                case 3:
+                    switch(z1){
+                        case 0:p1=ui->pb130;break;
+                        case 1:p1=ui->pb131;break;
+                        case 2:p1=ui->pb132;break;
+                        case 3:p1=ui->pb133;break;
+                        case 4:p1=ui->pb134;break;
+                        case 5:p1=ui->pb135;break;
+                        case 6:p1=ui->pb136;break;
+                        case 7:p1=ui->pb137;break;
+                        case 8:p1=ui->pb138;break;
+                        case 9:p1=ui->pb139;break;
+                    }break;
+                case 4:
+                    switch(z1){
+                        case 0:p1=ui->pb140;break;
+                        case 1:p1=ui->pb141;break;
+                        case 2:p1=ui->pb142;break;
+                        case 3:p1=ui->pb143;break;
+                        case 4:p1=ui->pb144;break;
+                        case 5:p1=ui->pb145;break;
+                        case 6:p1=ui->pb146;break;
+                        case 7:p1=ui->pb147;break;
+                        case 8:p1=ui->pb148;break;
+                        case 9:p1=ui->pb149;break;
+                    }break;
+                case 5:
+                    switch(z1){
+                        case 0:p1=ui->pb150;break;
+                        case 1:p1=ui->pb151;break;
+                        case 2:p1=ui->pb152;break;
+                        case 3:p1=ui->pb153;break;
+                        case 4:p1=ui->pb154;break;
+                        case 5:p1=ui->pb155;break;
+                        case 6:p1=ui->pb156;break;
+                        case 7:p1=ui->pb157;break;
+                        case 8:p1=ui->pb158;break;
+                        case 9:p1=ui->pb159;break;
+                    }break;
+                case 6:
+                    switch(z1){
+                        case 0:p1=ui->pb160;break;
+                        case 1:p1=ui->pb161;break;
+                        case 2:p1=ui->pb162;break;
+                        case 3:p1=ui->pb163;break;
+                        case 4:p1=ui->pb164;break;
+                        case 5:p1=ui->pb165;break;
+                        case 6:p1=ui->pb166;break;
+                        case 7:p1=ui->pb167;break;
+                        case 8:p1=ui->pb168;break;
+                        case 9:p1=ui->pb169;break;
+                    }break;
+                case 7:
+                    switch(z1){
+                        case 0:p1=ui->pb170;break;
+                        case 1:p1=ui->pb171;break;
+                        case 2:p1=ui->pb172;break;
+                        case 3:p1=ui->pb173;break;
+                        case 4:p1=ui->pb174;break;
+                        case 5:p1=ui->pb175;break;
+                        case 6:p1=ui->pb176;break;
+                        case 7:p1=ui->pb177;break;
+                        case 8:p1=ui->pb178;break;
+                        case 9:p1=ui->pb179;break;
+                    }break;
+                case 8:
+                    switch(z1){
+                     case 0:p1=ui->pb180;break;
+                        case 1:p1=ui->pb181;break;
+                        case 2:p1=ui->pb182;break;
+                        case 3:p1=ui->pb183;break;
+                        case 4:p1=ui->pb184;break;
+                        case 5:p1=ui->pb185;break;
+                        case 6:p1=ui->pb186;break;
+                        case 7:p1=ui->pb187;break;
+                        case 8:p1=ui->pb188;break;
+                        case 9:p1=ui->pb189;break;
+                    }break;
+                case 9:
+                    switch(z1){
+                        case 0:p1=ui->pb190;break;
+                        case 1:p1=ui->pb191;break;
+                        case 2:p1=ui->pb192;break;
+                        case 3:p1=ui->pb193;break;
+                        case 4:p1=ui->pb194;break;
+                        case 5:p1=ui->pb195;break;
+                        case 6:p1=ui->pb196;break;
+                        case 7:p1=ui->pb197;break;
+                        case 8:p1=ui->pb198;break;
+                        case 9:p1=ui->pb199;break;
+                    }break;
+                }
+            }break;
+        }
+        switch(x2){
+            case 0:{
+                switch(y2){
+                case 0:
+                    switch(z2){
+                        case 0:p2=ui->pb000;break;
+                        case 1:p2=ui->pb001;break;
+                        case 2:p2=ui->pb002;break;
+                        case 3:p2=ui->pb003;break;
+                        case 4:p2=ui->pb004;break;
+                        case 5:p2=ui->pb005;break;
+                        case 6:p2=ui->pb006;break;
+                        case 7:p2=ui->pb007;break;
+                        case 8:p2=ui->pb008;break;
+                        case 9:p2=ui->pb009;break;
+                    }break;
+                case 1:
+                    switch(z2){
+                        case 0:p2=ui->pb010;break;
+                        case 1:p2=ui->pb011;break;
+                        case 2:p2=ui->pb012;break;
+                        case 3:p2=ui->pb013;break;
+                        case 4:p2=ui->pb014;break;
+                        case 5:p2=ui->pb015;break;
+                        case 6:p2=ui->pb016;break;
+                        case 7:p2=ui->pb017;break;
+                        case 8:p2=ui->pb018;break;
+                        case 9:p2=ui->pb019;break;
+                    }break;
+                case 2:
+                    switch(z2){
+                        case 0:p2=ui->pb020;break;
+                        case 1:p2=ui->pb021;break;
+                        case 2:p2=ui->pb022;break;
+                        case 3:p2=ui->pb023;break;
+                        case 4:p2=ui->pb024;break;
+                        case 5:p2=ui->pb025;break;
+                        case 6:p2=ui->pb026;break;
+                        case 7:p2=ui->pb027;break;
+                        case 8:p2=ui->pb028;break;
+                        case 9:p2=ui->pb029;break;
+                    }break;
+                case 3:
+                    switch(z2){
+                        case 0:p2=ui->pb030;break;
+                        case 1:p2=ui->pb031;break;
+                        case 2:p2=ui->pb032;break;
+                        case 3:p2=ui->pb033;break;
+                        case 4:p2=ui->pb034;break;
+                        case 5:p2=ui->pb035;break;
+                        case 6:p2=ui->pb036;break;
+                        case 7:p2=ui->pb037;break;
+                        case 8:p2=ui->pb038;break;
+                        case 9:p2=ui->pb039;break;
+                    }break;
+                case 4:
+                    switch(z2){
+                        case 0:p2=ui->pb040;break;
+                        case 1:p2=ui->pb041;break;
+                        case 2:p2=ui->pb042;break;
+                        case 3:p2=ui->pb043;break;
+                        case 4:p2=ui->pb044;break;
+                        case 5:p2=ui->pb045;break;
+                        case 6:p2=ui->pb046;break;
+                        case 7:p2=ui->pb047;break;
+                        case 8:p2=ui->pb048;break;
+                        case 9:p2=ui->pb049;break;
+                    }break;
+                case 5:
+                    switch(z2){
+                        case 0:p2=ui->pb050;break;
+                        case 1:p2=ui->pb051;break;
+                        case 2:p2=ui->pb052;break;
+                        case 3:p2=ui->pb053;break;
+                        case 4:p2=ui->pb054;break;
+                        case 5:p2=ui->pb055;break;
+                        case 6:p2=ui->pb056;break;
+                        case 7:p2=ui->pb057;break;
+                        case 8:p2=ui->pb058;break;
+                        case 9:p2=ui->pb059;break;
+                    }break;
+                case 6:
+                    switch(z2){
+                        case 0:p2=ui->pb060;break;
+                        case 1:p2=ui->pb061;break;
+                        case 2:p2=ui->pb062;break;
+                        case 3:p2=ui->pb063;break;
+                        case 4:p2=ui->pb064;break;
+                        case 5:p2=ui->pb065;break;
+                        case 6:p2=ui->pb066;break;
+                        case 7:p2=ui->pb067;break;
+                        case 8:p2=ui->pb068;break;
+                        case 9:p2=ui->pb069;break;
+                    }break;
+                case 7:
+                    switch(z2){
+                        case 0:p2=ui->pb070;break;
+                        case 1:p2=ui->pb071;break;
+                        case 2:p2=ui->pb072;break;
+                        case 3:p2=ui->pb073;break;
+                        case 4:p2=ui->pb074;break;
+                        case 5:p2=ui->pb075;break;
+                        case 6:p2=ui->pb076;break;
+                        case 7:p2=ui->pb077;break;
+                        case 8:p2=ui->pb078;break;
+                        case 9:p2=ui->pb079;break;
+                    }break;
+                case 8:
+                    switch(z2){
+                        case 0:p2=ui->pb080;break;
+                        case 1:p2=ui->pb081;break;
+                        case 2:p2=ui->pb082;break;
+                        case 3:p2=ui->pb083;break;
+                        case 4:p2=ui->pb084;break;
+                        case 5:p2=ui->pb085;break;
+                        case 6:p2=ui->pb086;break;
+                        case 7:p2=ui->pb087;break;
+                        case 8:p2=ui->pb088;break;
+                        case 9:p2=ui->pb089;break;
+                    }break;
+                case 9:
+                    switch(z2){
+                        case 0:p2=ui->pb090;break;
+                        case 1:p2=ui->pb091;break;
+                        case 2:p2=ui->pb092;break;
+                        case 3:p2=ui->pb093;break;
+                        case 4:p2=ui->pb094;break;
+                        case 5:p2=ui->pb095;break;
+                        case 6:p2=ui->pb096;break;
+                        case 7:p2=ui->pb097;break;
+                        case 8:p2=ui->pb098;break;
+                        case 9:p2=ui->pb099;break;
+                    }break;
+                }
+            }break;
+            case 1:{
+                switch(y2){
+                case 0:
+                    switch(z2){
+                        case 0:p2=ui->pb100;break;
+                        case 1:p2=ui->pb101;break;
+                        case 2:p2=ui->pb102;break;
+                        case 3:p2=ui->pb103;break;
+                        case 4:p2=ui->pb104;break;
+                        case 5:p2=ui->pb105;break;
+                        case 6:p2=ui->pb106;break;
+                        case 7:p2=ui->pb107;break;
+                        case 8:p2=ui->pb108;break;
+                        case 9:p2=ui->pb109;break;
+                    }break;
+                case 1:
+                    switch(z2){
+                        case 0:p2=ui->pb110;break;
+                        case 1:p2=ui->pb111;break;
+                        case 2:p2=ui->pb112;break;
+                        case 3:p2=ui->pb113;break;
+                        case 4:p2=ui->pb114;break;
+                        case 5:p2=ui->pb115;break;
+                        case 6:p2=ui->pb116;break;
+                        case 7:p2=ui->pb117;break;
+                        case 8:p2=ui->pb118;break;
+                        case 9:p2=ui->pb119;break;
+                    }break;
+                case 2:
+                    switch(z2){
+                        case 0:p2=ui->pb120;break;
+                        case 1:p2=ui->pb121;break;
+                        case 2:p2=ui->pb122;break;
+                        case 3:p2=ui->pb123;break;
+                        case 4:p2=ui->pb124;break;
+                        case 5:p2=ui->pb125;break;
+                        case 6:p2=ui->pb126;break;
+                        case 7:p2=ui->pb127;break;
+                        case 8:p2=ui->pb128;break;
+                        case 9:p2=ui->pb129;break;
+                    }break;
+                case 3:
+                    switch(z2){
+                        case 0:p2=ui->pb130;break;
+                        case 1:p2=ui->pb131;break;
+                        case 2:p2=ui->pb132;break;
+                        case 3:p2=ui->pb133;break;
+                        case 4:p2=ui->pb134;break;
+                        case 5:p2=ui->pb135;break;
+                        case 6:p2=ui->pb136;break;
+                        case 7:p2=ui->pb137;break;
+                        case 8:p2=ui->pb138;break;
+                        case 9:p2=ui->pb139;break;
+                    }break;
+                case 4:
+                    switch(z2){
+                        case 0:p2=ui->pb140;break;
+                        case 1:p2=ui->pb141;break;
+                        case 2:p2=ui->pb142;break;
+                        case 3:p2=ui->pb143;break;
+                        case 4:p2=ui->pb144;break;
+                        case 5:p2=ui->pb145;break;
+                        case 6:p2=ui->pb146;break;
+                        case 7:p2=ui->pb147;break;
+                        case 8:p2=ui->pb148;break;
+                        case 9:p2=ui->pb149;break;
+                    }break;
+                case 5:
+                    switch(z2){
+                        case 0:p2=ui->pb150;break;
+                        case 1:p2=ui->pb151;break;
+                        case 2:p2=ui->pb152;break;
+                        case 3:p2=ui->pb153;break;
+                        case 4:p2=ui->pb154;break;
+                        case 5:p2=ui->pb155;break;
+                        case 6:p2=ui->pb156;break;
+                        case 7:p2=ui->pb157;break;
+                        case 8:p2=ui->pb158;break;
+                        case 9:p2=ui->pb159;break;
+                    }break;
+                case 6:
+                    switch(z2){
+                        case 0:p2=ui->pb160;break;
+                        case 1:p2=ui->pb161;break;
+                        case 2:p2=ui->pb162;break;
+                        case 3:p2=ui->pb163;break;
+                        case 4:p2=ui->pb164;break;
+                        case 5:p2=ui->pb165;break;
+                        case 6:p2=ui->pb166;break;
+                        case 7:p2=ui->pb167;break;
+                        case 8:p2=ui->pb168;break;
+                        case 9:p2=ui->pb169;break;
+                    }break;
+                case 7:
+                    switch(z2){
+                        case 0:p2=ui->pb170;break;
+                        case 1:p2=ui->pb171;break;
+                        case 2:p2=ui->pb172;break;
+                        case 3:p2=ui->pb173;break;
+                        case 4:p2=ui->pb174;break;
+                        case 5:p2=ui->pb175;break;
+                        case 6:p2=ui->pb176;break;
+                        case 7:p2=ui->pb177;break;
+                        case 8:p2=ui->pb178;break;
+                        case 9:p2=ui->pb179;break;
+                    }break;
+                case 8:
+                    switch(z2){
+                     case 0:p2=ui->pb180;break;
+                        case 1:p2=ui->pb181;break;
+                        case 2:p2=ui->pb182;break;
+                        case 3:p2=ui->pb183;break;
+                        case 4:p2=ui->pb184;break;
+                        case 5:p2=ui->pb185;break;
+                        case 6:p2=ui->pb186;break;
+                        case 7:p2=ui->pb187;break;
+                        case 8:p2=ui->pb188;break;
+                        case 9:p2=ui->pb189;break;
+                    }break;
+                case 9:
+                    switch(z2){
+                        case 0:p2=ui->pb190;break;
+                        case 1:p2=ui->pb191;break;
+                        case 2:p2=ui->pb192;break;
+                        case 3:p2=ui->pb193;break;
+                        case 4:p2=ui->pb194;break;
+                        case 5:p2=ui->pb195;break;
+                        case 6:p2=ui->pb196;break;
+                        case 7:p2=ui->pb197;break;
+                        case 8:p2=ui->pb198;break;
+                        case 9:p2=ui->pb199;break;
+                    }break;
+                }
+            }break;
+        }
+    }
+
+    if(type==0){
+        std::cout<<"type==0\n";
+        animation1 = new QPropertyAnimation(p1, "geometry");
+        animation2 = new QPropertyAnimation(p2, "geometry");
+        temp=pb[x1][y1][z1].pic;
+        pb[x1][y1][z1].pic=pb[x2][y2][z2].pic;
+        pb[x2][y2][z2].pic=temp;
+        p1->setIcon(pic[pb[x2][y2][z2].pic]);
+        p2->setIcon(pic[pb[x1][y1][z1].pic]);
+        animation1->setDuration(400);
+        animation1->setStartValue(p2->geometry());
+        animation1->setEndValue(p1->geometry());
+        animation2->setDuration(400);
+        animation2->setStartValue(p1->geometry());
+        animation2->setEndValue(p2->geometry());
+
+        group[x1] = new QParallelAnimationGroup;
+        if(x1==0)connect(group[x1], SIGNAL(finished()), this, SLOT(endChange0()));
+        else if(x1==1)connect(group[x1], SIGNAL(finished()), this, SLOT(endChange1()));
+        group[x1]->addAnimation(animation1);
+        group[x1]->addAnimation(animation2);
+        group[x1]->start();
+    }
+    else if(type==1){
+        std::cout<<"type==1\n";
+        animation1 = new QPropertyAnimation(p1, "geometry");
+        if(pb[x2][y2][z2].pic==0){
+            Creat(x2,y2,z2,0);
+        }
+        pb[x1][y1][z1].pic=pb[x2][y2][z2].pic;
+        p1->setIcon(pic[pb[x2][y2][z2].pic]);
+        pb[x2][y2][z2].pic=0;
+        myShow();
+        animation1->setDuration(400-y1*25);
+        animation1->setStartValue(p2->geometry());
+        animation1->setEndValue(p1->geometry());
+        animation1->start();
+    }
+    else if(type==2){
+        animation1 = new QPropertyAnimation(p1, "geometry");
+        std::cout<<"type==2\n";
+        if(pb[x1][y1][z1].pic==0)
+            Creat(x2,y2,z2,0);
+        myShow();
+        animation1->setDuration(600);
+        animation1->setStartValue(p1->geometry());
+        animation1->setEndValue(p1->geometry());
+        animation1->start();
+        if(x1==0)connect(animation1, SIGNAL(finished()), this, SLOT(endFall0()));
+        else if(x1==1)connect(animation1, SIGNAL(finished()), this, SLOT(endFall1()));
+    }
+
+}
+
+
+
+void Game::endChange0(){
+    int x=0;
+    if(checkEliminate(x,1)==1){
+        doEliminate(x);
+        doFall(x);
+        std::cout<<"doFall\n";
+    }
+    myShow();
+}
+
+void Game::endChange1(){
+    int x=1;
+    if(checkEliminate(x,1)==1){
+        doEliminate(x);
+        doFall(x);
+        std::cout<<"doFall\n";
+    }
+    myShow();
+}
+
+void Game::endFall0(){
+    std::cout<<"endFall 0\n";
+    int x=0;
+    myShow();
+    if(checkEliminate(x,1)==1){
+        doEliminate(x);
+        doFall(x);
+    }
+    else
+        game_lock=0;
+}
+
+void Game::endFall1(){
+    std::cout<<"endFall 1\n";
+    int x=1;
+    myShow();
+    if(checkEliminate(x,1)==1){
+        doEliminate(x);
+        doFall(x);
+    }
+    else
+        game_lock=0;
 }
 
 //when bottun is clicked
@@ -701,16 +1396,20 @@ void Game::doClicked(int n){
     std::cout<<n<<"\n";
     int x=0,y=0,z=0;
     x=n/100%10;
+    if(game_lock==1)
+        return;
     y=n/10%10;
     z=n%10;
+
     if(pb[x][y][z].pic>=2&&pb[x][y][z].pic<=7){
         pb[x][y][z].click=1;
-        checkClick(x);
+        //game_lock=1;
+        checkClick(x);       
     }
-    else if(pb[x][y][z].pic==8);
-    else if(pb[x][y][z].pic==9);
-    else if(pb[x][y][z].pic==10);
-    else if(pb[x][y][z].pic==11);
+    //else if(pb[x][y][z].pic==8);
+    //else if(pb[x][y][z].pic==9);
+    //else if(pb[x][y][z].pic==10);
+    //else if(pb[x][y][z].pic==11);
 
     myShow();
 }

@@ -6,6 +6,7 @@ Start::Start(QWidget *parent) :
     ui(new Ui::Start)
 {
     ui->setupUi(this);
+
 }
 
 Start::~Start()

@@ -8,7 +8,12 @@
 #include <QPushButton>
 #include <QGridLayout>
 #include <QSignalMapper>
+#include <QPropertyAnimation>
 #include <QPixmap>
+#include <QtGui>
+#include <QtCore>
+#include <QDialog>
+#include <QTimer>
 #include <iostream>
 #include <string>
 #include <vector>
@@ -25,7 +30,9 @@ class Game : public QWidget
     Q_OBJECT
 
 public:
+
     explicit Game(QWidget *parent = 0);
+
     ~Game();
 
     void myShow();//myshow
@@ -46,10 +53,23 @@ public:
 
     void resetClick(int x);
 
-    void doChaange(int x1,int y1,int z1,int x2,int y2,int z2);
+    void resetElm(int x);
 
+    void doChange(int x1,int y1,int z1,int x2,int y2,int z2);
+
+    void doFall(int x);
+
+    void doAnimation(int x1,int y1,int z1,int x2,int y2,int z2,int type=0);
 
 private slots:
+
+    void endChange0();
+
+    void endChange1();
+
+    void endFall0();
+
+    void endFall1();
 
     void doClicked(int n);//when bottun is clicked
 
@@ -58,6 +78,9 @@ private:
     Block pb[2][10][10];
     QPixmap pic[15];
     QSignalMapper *signalMapper;
+    QPropertyAnimation *animation1, *animation2;
+    QParallelAnimationGroup *group[2];
+    int game_lock;//0:unlocked 1:locked
 };
 
 #endif // GAME_H

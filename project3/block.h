@@ -7,6 +7,8 @@
 #include <QVBoxLayout>
 #include <QPixmap>
 
+#define Block_Size 50
+
 class Block
 {
 
