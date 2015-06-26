@@ -2634,6 +2634,194 @@
    <property name="scaledContents">
     <bool>true</bool>
    </property>
+   <property name="wordWrap">
+    <bool>false</bool>
+   </property>
+   <property name="openExternalLinks">
+    <bool>false</bool>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="pushbutton_com2">
+   <property name="geometry">
+    <rect>
+     <x>650</x>
+     <y>630</y>
+     <width>201</width>
+     <height>51</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>V.S. COM(LV2)</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="pushbutton_com3">
+   <property name="geometry">
+    <rect>
+     <x>650</x>
+     <y>710</y>
+     <width>201</width>
+     <height>51</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>V.S. COM(LV3)</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="quit">
+   <property name="geometry">
+    <rect>
+     <x>650</x>
+     <y>790</y>
+     <width>201</width>
+     <height>51</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>QUIT</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="pushbutton_two_player">
+   <property name="geometry">
+    <rect>
+     <x>650</x>
+     <y>470</y>
+     <width>201</width>
+     <height>51</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>2 PLAYER</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="pushbutton_one_player">
+   <property name="geometry">
+    <rect>
+     <x>650</x>
+     <y>390</y>
+     <width>201</width>
+     <height>51</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>1 PLAYER</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="pushbutton_com1">
+   <property name="geometry">
+    <rect>
+     <x>650</x>
+     <y>550</y>
+     <width>201</width>
+     <height>51</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>V.S. COM (LV1)</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_attack_0">
+   <property name="geometry">
+    <rect>
+     <x>330</x>
+     <y>160</y>
+     <width>171</width>
+     <height>81</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-size:36pt; color:#ffffff;&quot;&gt;0&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_score_0">
+   <property name="geometry">
+    <rect>
+     <x>100</x>
+     <y>160</y>
+     <width>171</width>
+     <height>81</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-size:36pt; color:#ffffff;&quot;&gt;0&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_score_1">
+   <property name="geometry">
+    <rect>
+     <x>1240</x>
+     <y>160</y>
+     <width>171</width>
+     <height>81</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-size:36pt; color:#ffffff;&quot;&gt;0&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_attack_1">
+   <property name="geometry">
+    <rect>
+     <x>1000</x>
+     <y>160</y>
+     <width>171</width>
+     <height>81</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-size:36pt; color:#ffffff;&quot;&gt;0&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_attack_title0">
+   <property name="geometry">
+    <rect>
+     <x>330</x>
+     <y>60</y>
+     <width>171</width>
+     <height>81</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-size:28pt; font-style:italic; color:#ffffff;&quot;&gt;Attack&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_score_title0">
+   <property name="geometry">
+    <rect>
+     <x>100</x>
+     <y>60</y>
+     <width>171</width>
+     <height>81</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-size:28pt; font-style:italic; color:#ffffff;&quot;&gt;Score&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_score_title1">
+   <property name="geometry">
+    <rect>
+     <x>1240</x>
+     <y>60</y>
+     <width>171</width>
+     <height>81</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-size:28pt; font-style:italic; color:#ffffff;&quot;&gt;Score&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_attack_title1">
+   <property name="geometry">
+    <rect>
+     <x>1000</x>
+     <y>60</y>
+     <width>171</width>
+     <height>81</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-size:28pt; font-style:italic; color:#ffffff;&quot;&gt;Attack&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+   </property>
   </widget>
   <zorder>background</zorder>
   <zorder>pb090</zorder>
@@ -2836,6 +3024,20 @@
   <zorder>pb116</zorder>
   <zorder>pb193</zorder>
   <zorder>pb168</zorder>
+  <zorder>pushbutton_com2</zorder>
+  <zorder>pushbutton_com3</zorder>
+  <zorder>quit</zorder>
+  <zorder>pushbutton_two_player</zorder>
+  <zorder>pushbutton_one_player</zorder>
+  <zorder>pushbutton_com1</zorder>
+  <zorder>label_attack_0</zorder>
+  <zorder>label_score_0</zorder>
+  <zorder>label_score_1</zorder>
+  <zorder>label_attack_1</zorder>
+  <zorder>label_attack_title0</zorder>
+  <zorder>label_score_title0</zorder>
+  <zorder>label_score_title1</zorder>
+  <zorder>label_attack_title1</zorder>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <resources/>

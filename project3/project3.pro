@@ -15,11 +15,11 @@ TEMPLATE = app
 SOURCES += main.cpp\
         game.cpp \
     block.cpp \
-    start.cpp
+    player.cpp
 
 HEADERS  += game.h \
     block.h \
-    start.h
+    player.h
 
 FORMS    += game.ui \
     start.ui

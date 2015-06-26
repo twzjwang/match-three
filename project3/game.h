@@ -2,21 +2,19 @@
 #define GAME_H
 
 #include <block.h>
+#include <player.h>
 #include <QObject>
 #include <QString>
 #include <QWidget>
 #include <QPushButton>
 #include <QGridLayout>
+#include <QMainWindow>
 #include <QSignalMapper>
 #include <QPropertyAnimation>
 #include <QPixmap>
-#include <QtGui>
 #include <QtCore>
-#include <QDialog>
-#include <QTimer>
 #include <iostream>
 #include <string>
-#include <vector>
 #include <time.h>
 #include <math.h>
 #include <stdlib.h>
@@ -39,8 +37,6 @@ public:
 
     void giveStartBlock(int t);//0:0 1:1 2:both
 
-    void setPB(int x, int y, int z, int p);//set pushbottun
-
     void Creat(int x, int y, int z, int p);//creat random pic(or p)
 
     //check if any block could be eliminated(yes:1 no:0)
@@ -51,13 +47,19 @@ public:
 
     void checkClick(int x);
 
+    int checkLose(int x);//1:lose
+
     void resetClick(int x);
 
     void resetElm(int x);
 
     void doChange(int x1,int y1,int z1,int x2,int y2,int z2);
 
-    void doFall(int x);
+    int doFall(int x);
+
+    void doReverse(int x);
+
+    void doAttack(int x);
 
     void doAnimation(int x1,int y1,int z1,int x2,int y2,int z2,int type=0);
 
@@ -73,14 +75,22 @@ private slots:
 
     void doClicked(int n);//when bottun is clicked
 
+    void on_pushbutton_one_player_clicked();
+
+    void on_pushbutton_two_player_clicked();
+
 private:
     Ui::Game *ui;
     Block pb[2][10][10];
+    Player player[2];
     QPixmap pic[15];
     QSignalMapper *signalMapper;
-    QPropertyAnimation *animation1, *animation2;
-    QParallelAnimationGroup *group[2];
-    int game_lock;//0:unlocked 1:locked
+    QGridLayout *gridLayout;
+    QPushButton *button[2][10][10];
+    QPropertyAnimation *animation1, *animation2, *animation3;
+    QParallelAnimationGroup *group[2],*group2;
+    int game_lock[2];//0:unlocked 1:locked
+    int reverse;
 };
 
 #endif // GAME_H
