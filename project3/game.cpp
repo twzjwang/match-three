@@ -8,24 +8,42 @@ Game::Game(QWidget *parent) :
     ui->setupUi(this);
 
     srand((unsigned)time(NULL));
+{
+    QPixmap white("../pic/white.jpg");                          pic[1]=white;
+    QPixmap red("../pic/red.jpg");                              pic[2]=red;
+    QPixmap orange("../pic/orange.jpg");                        pic[3]=orange;
+    QPixmap yellow("../pic/yellow.jpg");                        pic[4]=yellow;
+    QPixmap green("../pic/green.jpg");                          pic[5]=green;
+    QPixmap blue("../pic/blue.jpg");                            pic[6]=blue;
+    QPixmap purple("../pic/purple.jpg");                        pic[7]=purple;
+    QPixmap black("../pic/black.jpg");                          pic[8]=black;
 
-    QPixmap white("../pic/white.jpg");
-    QPixmap red("../pic/red.jpg");
-    QPixmap orange("../pic/orange.jpg");
-    QPixmap yellow("../pic/yellow.jpg");
-    QPixmap green("../pic/green.jpg");
-    QPixmap blue("../pic/blue.jpg");
-    QPixmap purple("../pic/purple.jpg");
-    QPixmap de_around("../pic/de_around.jpg");
-    QPixmap de_column("../pic/de_column.jpg");
-    QPixmap de_row("../pic/de_row.jpg");
-    QPixmap de_same_color("../pic/de_same_color.jpg");
-    QPixmap black("../pic/black.jpg");
+    QPixmap de_around_red("../pic/de_around_red.jpg");          pic[12]=de_around_red;
+    QPixmap de_around_orange("../pic/de_around_orange.jpg");    pic[13]=de_around_orange;
+    QPixmap de_around_yellow("../pic/de_around_yellow.jpg");    pic[14]=de_around_yellow;
+    QPixmap de_around_green("../pic/de_around_green.jpg");      pic[15]=de_around_green;
+    QPixmap de_around_blue("../pic/de_around_blue.jpg");        pic[16]=de_around_blue;
+    QPixmap de_around_purple("../pic/de_around_purple.jpg");    pic[17]=de_around_purple;
+    QPixmap de_around_black("../pic/de_around.jpg");            pic[18]=de_around_black;
 
-    pic[1]=white;pic[2]=red;pic[3]=orange;pic[4]=yellow;
-    pic[5]=green;pic[6]=blue;pic[7]=purple;pic[8]=de_around;
-    pic[9]=de_column;pic[10]=de_row;pic[11]=de_same_color;
-    pic[12]=black;
+    QPixmap de_column_red("../pic/de_column_red.jpg");          pic[22]=de_column_red;
+    QPixmap de_column_orange("../pic/de_column_orange.jpg");    pic[23]=de_column_orange;
+    QPixmap de_column_yellow("../pic/de_column_yellow.jpg");    pic[24]=de_column_yellow;
+    QPixmap de_column_green("../pic/de_column_green.jpg");      pic[25]=de_column_green;
+    QPixmap de_column_blue("../pic/de_column_blue.jpg");        pic[26]=de_column_blue;
+    QPixmap de_column_purple("../pic/de_column_purple.jpg");    pic[27]=de_column_purple;
+    QPixmap de_column_black("../pic/de_column.jpg");            pic[28]=de_column_black;
+
+    QPixmap de_row_red("../pic/de_row_red.jpg");                pic[32]=de_row_red;
+    QPixmap de_row_orange("../pic/de_row_orange.jpg");          pic[33]=de_row_orange;
+    QPixmap de_row_yellow("../pic/de_row_yellow.jpg");          pic[34]=de_row_yellow;
+    QPixmap de_row_green("../pic/de_row_green.jpg");            pic[35]=de_row_green;
+    QPixmap de_row_blue("../pic/de_row_blue.jpg");              pic[36]=de_row_blue;
+    QPixmap de_row_purple("../pic/de_row_purple.jpg");          pic[37]=de_row_purple;
+    QPixmap de_row_black("../pic/de_row.jpg");                  pic[38]=de_row_black;
+
+    QPixmap de_same_color("../pic/de_same_color.jpg");          pic[40]=de_same_color;
+}
 
 
 {
@@ -260,7 +278,9 @@ void Game::myShow(){
             //setPB(0,i,j,pb[0][i][j].pic);
             //setPB(1,i,j,pb[1][i][j].pic);
             button[0][i][j]->setIcon(pic[pb[0][i][j].pic]);
+            button[0][i][j]->setIconSize(button[0][i][j]->size());
             button[1][i][j]->setIcon(pic[pb[1][i][j].pic]);
+            button[1][i][j]->setIconSize(button[1][i][j]->size());
         }
     }
 
@@ -334,10 +354,9 @@ int Game::checkEliminate(int x, int record_elm=0){
     for(int i=0;i<10;i++){
         con=1;temp=0;
         for(int j=0;j<10;j++){
-            if(temp==pb[x][i][j].pic){
-                if(pb[x][i][j].pic>=2&&pb[x][i][j].pic<=7)
+            if(temp==pb[x][i][j].pic%10){
+                if(pb[x][i][j].pic%10>=2&&pb[x][i][j].pic%10<=7)
                     con++;;
-
             }
             else{
                 if(con>=3){
@@ -345,29 +364,29 @@ int Game::checkEliminate(int x, int record_elm=0){
                     for(int k=1;k<=con;k++)
                         if(record_elm==1)pb[x][i][j-k].elm=1;
                     if(con>=5){
-                        pb[x][i][j-3].pic=11;
+                        pb[x][i][j-3].pic=40;
                         pb[x][i][j-3].elm=0;
                     }
                     else if(con>=4){
-                        pb[x][i][j-2].pic=10;
+                        pb[x][i][j-2].pic+=30;
                         pb[x][i][j-2].elm=0;
                     }
                     re=1;                    
                 }
                 con=1;
             }
-            temp=pb[x][i][j].pic;
+            temp=pb[x][i][j].pic%10;
         }
         if(con>=3){
             std::cout<<"row: "<<con<<"\n";
             for(int k=1;k<=con;k++)
                 if(record_elm==1)pb[x][i][10-k].elm=1;
             if(con>=5){
-                pb[x][i][7].pic=11;
+                pb[x][i][7].pic=40;
                 pb[x][i][7].elm=0;
             }
             else if(con>=4){
-                pb[x][i][8].pic=10;
+                pb[x][i][8].pic+=30;
                 pb[x][i][8].elm=0;
             }
             re=1;
@@ -379,8 +398,8 @@ int Game::checkEliminate(int x, int record_elm=0){
     for(int j=0;j<10;j++){
         con=1;temp=0;
         for(int i=0;i<10;i++){
-            if(temp==pb[x][i][j].pic){
-                if(pb[x][i][j].pic>=2&&pb[x][i][j].pic<=7)
+            if(temp==pb[x][i][j].pic%10){
+                if(pb[x][i][j].pic%10>=2&&pb[x][i][j].pic%10<=7)
                     con++;;
             }
             else{
@@ -397,21 +416,21 @@ int Game::checkEliminate(int x, int record_elm=0){
                                 pb[x][i-k][j].elm=1;
                         }
                     if(con>=5){
-                        pb[x][i-3][j].pic=11;
+                        pb[x][i-3][j].pic=40;
                         pb[x][i-3][j].elm=0;
                     }
                     else if(con>=4){
-                        pb[x][i-2][j].pic=9;
+                        pb[x][i-2][j].pic+=20;
                         pb[x][i-2][j].elm=0;
                     }
                     else if(s==1)
-                        pb[tx][ty][tz].pic=8;
+                        pb[tx][ty][tz].pic+=10;
                     re=1;
                     s=0;
                 }
                 con=1;
             }
-            temp=pb[x][i][j].pic;
+            temp=pb[x][i][j].pic%10;
         }
         if(con>=3){
             std::cout<<"col: "<<con<<"\n";
@@ -425,22 +444,38 @@ int Game::checkEliminate(int x, int record_elm=0){
                         pb[x][10-k][j].elm=1;
                 }
             if(con>=5){
-                pb[x][7][j].pic=11;
+                pb[x][7][j].pic=40;
                 pb[x][7][j].elm=0;
             }
             else if(con>=4){
-                pb[x][8][j].pic=9;
+                pb[x][8][j].pic+=20;
                 pb[x][8][j].elm=0;
             }
             else if(s==1)
-                pb[tx][ty][tz].pic=8;
+                pb[tx][ty][tz].pic+=10;
             re=1;
 
         }
         con=1;
         s=0;
     }
-
+    for(int i=0;i<10;i++){
+        for(int j=0;j<10;j++){
+            if(pb[x][i][j].pic>10&&pb[x][i][j].elm==1){
+                if(pb[x][i][j].pic>=40){
+                    pb[x][i][j].special_case=4;
+                    pb[x][i][j].desamecol=0;
+                }
+                else if(pb[x][i][j].pic>30)
+                    pb[x][i][j].special_case=3;
+                else if(pb[x][i][j].pic>20)
+                    pb[x][i][j].special_case=2;
+                else if(pb[x][i][j].pic>10)
+                    pb[x][i][j].special_case=1;
+            }
+        }
+    }
+    checkSpecialCase(x);
     return re;
 }
 
@@ -456,6 +491,7 @@ void Game::doEliminate(int x){
     }
     resetElm(x);
 }
+
 void Game::checkClick(int x){
     int count_clicked=0;
     int x1=-1,x2=-1,y1=-1,y2=-1,z1=-1,z2=-1;
@@ -504,8 +540,38 @@ void Game::checkClick(int x){
         return;
     }
     else{
+        if(pb[x1][y1][z1].pic>=40){
+            pb[x2][y2][z2].special_case=4;
+            pb[x2][y2][z2].desamecol=pb[x2][y2][z2].pic%10;
+            reverse[x]=1;
+            de_same_color(x2,y2,z2,pb[x2][y2][z2].pic%10);
+            pb[x1][y1][z1].elm=1;
+            pb[x2][y2][z2].elm=1;
+        }
+//        else if(pb[x1][y1][z1].pic>30)
+//            pb[x2][y2][z2].special_case=3;
+//        else if(pb[x1][y1][z1].pic>20)
+//            pb[x2][y2][z2].special_case=2;
+//        else if(pb[x1][y1][z1].pic>10){
+//            pb[x2][y2][z2].special_case=1;
+//            pb[x2][y2][z2].desamecol=pb[x1][y1][z1].pic%10;
+//        }
+        if(pb[x2][y2][z2].pic>=40){
+            pb[x1][y1][z1].special_case=4;
+            pb[x1][y1][z1].desamecol=pb[x1][y1][z1].pic%10;
+            reverse[x]=1;
+            de_same_color(x1,y1,z1,pb[x1][y1][z1].pic%10);
+            pb[x2][y2][z2].elm=1;
+            pb[x1][y1][z1].elm=1;
+        }
+//        else if(pb[x2][y2][z2].pic>30)
+//            pb[x1][y1][z1].special_case=3;
+//        else if(pb[x2][y2][z2].pic>20)
+//            pb[x1][y1][z1].special_case=2;
+//        else if(pb[x2][y2][z2].pic>10)
+//            pb[x1][y1][z1].special_case=1;
         doChange(x1,y1,z1,x2,y2,z2);
-        doFall(x1);
+        //doFall(x1);
     }
 }
 
@@ -520,6 +586,22 @@ int Game::checkLose(int x){
     return b;
 }
 
+void Game::checkSpecialCase(int x){
+    for(int i=0;i<10;i++){
+        for(int j=0;j<10;j++){
+            if(pb[x][i][j].special_case==1&&pb[x][i][j].elm==1)
+                de_around(x,i,j);
+            else if(pb[x][i][j].special_case==2&&pb[x][i][j].elm==1)
+                de_column(x,i,j);
+            else if(pb[x][i][j].special_case==3&&pb[x][i][j].elm==1)
+                de_row(x,i,j);
+            else if(pb[x][i][j].special_case==4&&pb[x][i][j].elm==1)
+                de_same_color(x,i,j,pb[x][i][j].desamecol);
+        }
+    }
+    resetSpecialCase(x);
+}
+
 void Game::resetClick(int x){
     for(int i=0;i<10;i++){
         for(int j=0;j<10;j++){
@@ -532,6 +614,15 @@ void Game::resetElm(int x){
     for(int i=0;i<10;i++){
         for(int j=0;j<10;j++){
             pb[x][i][j].elm=0;
+        }
+    }
+}
+
+void Game::resetSpecialCase(int x){
+    for(int i=0;i<10;i++){
+        for(int j=0;j<10;j++){
+            pb[x][i][j].special_case=0;
+            pb[x][i][j].desamecol=-1;
         }
     }
 }
@@ -577,7 +668,7 @@ int Game::doFall(int x){
         }
         myShow();
     }
-    if(player[1].open==2&&reverse==1&&x==1){
+    if(player[1].open==2&&reverse[1]==1&&x==1){
         resetClick(x);
         game_lock[x]=0;
         autoRun(1);
@@ -586,7 +677,7 @@ int Game::doFall(int x){
     return 1;
 }
 
-void Game::doReverse(int x){
+void Game::doReverse(int x){    
     int count_clicked=0;
     int x1=-1,x2=-1,y1=-1,y2=-1,z1=-1,z2=-1;
     for(int i=0;i<10;i++){
@@ -610,6 +701,7 @@ void Game::doReverse(int x){
     }
     std::cout<<"check"<<x1<<" "<<y1<<" "<<z1<<" && "<<x2<<" "<<y2<<" "<<z2<<"\n";
     resetClick(x);
+    resetSpecialCase(x);
     doAnimation(x1,y1,z1,x2,y2,z2);
 }
 
@@ -622,8 +714,8 @@ void Game::doAttack(int x){
         if(checkLose(x)==1)
             return;
         std::cout<<x<<y<<z<<"\n";
-    }while(pb[x][y][z].pic==12);
-    pb[x][y][z].pic=12;
+    }while(pb[x][y][z].pic==8);
+    pb[x][y][z].pic=8;
 }
 
 //type 0: change    1:fall  2: column 0
@@ -671,7 +763,7 @@ void Game::doAnimation(int x1,int y1,int z1,int x2,int y2,int z2,int type){
         p1->setIcon(pic[pb[x2][y2][z2].pic]);
         pb[x2][y2][z2].pic=0;
         myShow();
-        animation3->setDuration(100);
+        animation3->setDuration(50+z1*5);
         animation3->setStartValue(p2->geometry());
         animation3->setEndValue(p1->geometry());
         //group2->addAnimation(animation3);
@@ -681,6 +773,145 @@ void Game::doAnimation(int x1,int y1,int z1,int x2,int y2,int z2,int type){
         else if(x1==1)connect(animation3, SIGNAL(finished()), this, SLOT(endFall1()));
     }
 }
+
+void Game::de_around(int x,int y,int z){
+    int ly,uy,lz,uz;
+    player[x].score+=5;
+    std::cout<<"dearound\n";
+
+    ly=(y<1?0:y-1);
+    lz=(z<1?0:z-1);
+    uy=(y>8?9:y+1);
+    uz=(z>8?9:z+1);
+    for(int i=ly;i<=uy;i++){
+        for(int j=lz;j<=uz;j++){
+            pb[x][i][j].elm=1;
+        }
+    }
+    int b=0;
+    for(int i=0;i<10;i++){
+        for(int j=0;j<10;j++){
+            if(pb[x][i][j].pic>10&&pb[x][i][j].elm==1){
+                if(pb[x][i][j].pic>=40){
+                    pb[x][i][j].special_case=4;
+                    pb[x][i][j].desamecol=0;
+                }
+                else if(pb[x][i][j].pic>30)
+                    pb[x][i][j].special_case=3;
+                else if(pb[x][i][j].pic>20)
+                    pb[x][i][j].special_case=2;
+                else if(pb[x][i][j].pic>10)
+                    pb[x][i][j].special_case=1;
+                b=1;
+            }
+        }
+    }
+//    if(b==1)
+//        checkSpecialCase(x);
+    doEliminate(x);
+    if(b==0)
+        doFall(x);
+}
+
+void Game::de_column(int x,int y,int z){
+    player[x].score+=5;
+    std::cout<<"deculumn\n";
+    for(y=0;y<10;y++)
+        pb[x][y][z].elm=1;
+    int b=0;
+    for(int i=0;i<10;i++){
+        for(int j=0;j<10;j++){
+            if(pb[x][i][j].pic>10&&pb[x][i][j].elm==1){
+                if(pb[x][i][j].pic>=40){
+                    pb[x][i][j].special_case=4;
+                    pb[x][i][j].desamecol=0;
+                }
+                else if(pb[x][i][j].pic>30)
+                    pb[x][i][j].special_case=3;
+                else if(pb[x][i][j].pic>20)
+                    pb[x][i][j].special_case=2;
+                else if(pb[x][i][j].pic>10)
+                    pb[x][i][j].special_case=1;
+                b=1;
+            }
+        }
+    }
+//    if(b==1)
+//        checkSpecialCase(x);
+    doEliminate(x);
+    if(b==0)
+        doFall(x);
+}
+
+void Game::de_row(int x,int y,int z){
+    player[x].score+=5;
+    std::cout<<"derow\n";
+    for(z=0;z<10;z++)
+        pb[x][y][z].elm=1;
+    int b=0;
+    for(int i=0;i<10;i++){
+        for(int j=0;j<10;j++){
+            if(pb[x][i][j].pic>10&&pb[x][i][j].elm==1){
+                if(pb[x][i][j].pic>=40){
+                    pb[x][i][j].special_case=4;
+                    pb[x][i][j].desamecol=0;
+                }
+                else if(pb[x][i][j].pic>30)
+                    pb[x][i][j].special_case=3;
+                else if(pb[x][i][j].pic>20)
+                    pb[x][i][j].special_case=2;
+                else if(pb[x][i][j].pic>10)
+                    pb[x][i][j].special_case=1;
+                b=1;
+            }
+        }
+    }
+//    if(b==1)
+//        checkSpecialCase(x);
+    doEliminate(x);
+    if(b==0)
+        doFall(x);
+    std::cout<<"doFall\n";
+}
+
+void Game::de_same_color(int x,int y,int z,int color=0){
+    pb[x][y][z].elm=1;
+    player[x].score+=10;
+    if(color==0)
+        color=rand()%6+2;
+    std::cout<<"desamecolor\n";
+    for(int i=0;i<10;i++){
+        for(int j=0;j<10;j++){
+            if(pb[x][i][j].pic%10==color)
+                pb[x][i][j].elm=1;
+        }
+    }
+    int b=0;
+    for(int i=0;i<10;i++){
+        for(int j=0;j<10;j++){
+            if(pb[x][i][j].pic>10&&pb[x][i][j].elm==1){
+                if(pb[x][i][j].pic>=40){
+                    pb[x][i][j].special_case=4;
+                    pb[x][i][j].desamecol=0;
+                }
+                else if(pb[x][i][j].pic>30)
+                    pb[x][i][j].special_case=3;
+                else if(pb[x][i][j].pic>20)
+                    pb[x][i][j].special_case=2;
+                else if(pb[x][i][j].pic>10)
+                    pb[x][i][j].special_case=1;
+                b=1;
+            }
+        }
+    }
+//    if(b==1)
+//        checkSpecialCase(x);
+    doEliminate(x);
+    //if(b==0)
+        doFall(x);
+    std::cout<<"doFall\n";
+}
+
 
 void Game::autoRun(int x=1){
     std::cout<<"AutoRun\n";
@@ -752,16 +983,17 @@ void Game::game_over(){
     myShow();
 }
 
-void Game::endChange0(){
+void Game::endChange0(){    
     int x=0;
     if(checkEliminate(x,1)==1){
+        checkSpecialCase(0);
         doEliminate(x);
         doFall(x);
-        reverse=1;
+        reverse[0]=1;
         std::cout<<"doFall\n";
     }
-    else if(reverse==0){
-        reverse=1;
+    else if(reverse[0]==0){
+        reverse[0]=1;
         doReverse(0);
     }
     resetClick(x);
@@ -772,17 +1004,18 @@ void Game::endChange0(){
 void Game::endChange1(){
     int x=1;
     if(checkEliminate(x,1)==1){
+        checkSpecialCase(1);
         doEliminate(x);
         doFall(x);
-        reverse=1;
+        reverse[1]=1;
         std::cout<<"doFall\n";
     }
-    else if(reverse==0){
-        reverse=1;
+    else if(reverse[1]==0){
+        reverse[1]=1;
         doReverse(1);
 
     }
-    else if(player[1].open==2&&reverse==1){
+    else if(player[1].open==2&&reverse[1]==1){
         autoRun();
         return;
     }
@@ -818,7 +1051,7 @@ void Game::endFall1(){
     }
     else{
         game_lock[1]=0;
-        if(player[1].open==2&&reverse==1){
+        if(player[1].open==2&&reverse[1]==1){
             resetClick(x);
             autoRun();
             return;
@@ -830,14 +1063,12 @@ void Game::endFall1(){
 void Game::doClicked(int n){
     std::cout<<n<<"\n";
     int x=0,y=0,z=0;
-    int ly,uy,lz,uz;
     x=n/100%10;
     if(player[x].open!=1)
         return;
     if(game_lock[x]==1)
         return;
-
-    if(player[x].score>=point_for_win){
+    if(checkLose(1-x)==1||checkLose(x)==1||player[x].score>=point_for_win){
         game_over();
         return;
     }
@@ -848,77 +1079,22 @@ void Game::doClicked(int n){
 
     y=n/10%10;
     z=n%10;
-    if(player[0].attack>player[0].attack_num&&player[1].open!=0){
-        player[0].attack-=player[0].attack_num;
-        doAttack(1);
-        myShow();
-    }
-    if(player[1].attack>player[1].attack_num&&player[0].open!=0){
-        player[1].attack-=player[1].attack_num;
-        doAttack(0);
-        myShow();
-    }
 
-
-    if(pb[x][y][z].pic>=2&&pb[x][y][z].pic<=7){
+    if(((pb[x][y][z].pic%10)>=2&&(pb[x][y][z].pic%10)<=7)||pb[x][y][z].pic==40){
+        while(player[0].attack>player[0].attack_num&&player[1].open!=0){
+            player[0].attack-=player[0].attack_num;
+            doAttack(1);
+            myShow();
+        }
+        while(player[1].attack>player[1].attack_num&&player[0].open!=0){
+            player[1].attack-=player[1].attack_num;
+            doAttack(0);
+            myShow();
+        }
         game_lock[x]=1;
         pb[x][y][z].click=1;
-        reverse=0;
+        reverse[x]=0;
         checkClick(x);       
-    }
-    else if(pb[x][y][z].pic==8){
-        player[x].score+=5;
-        std::cout<<"dearound\n";
-        ly=(y<1?0:y-1);
-        lz=(z<1?0:z-1);
-        uy=(y>8?9:y+1);
-        uz=(z>8?9:z+1);
-        for(int i=ly;i<=uy;i++){
-            for(int j=lz;j<=uz;j++){
-                pb[x][i][j].elm=1;
-            }
-        }
-        doEliminate(x);
-        doFall(x);
-        reverse=1;
-        std::cout<<"doFall\n";
-    }
-    else if(pb[x][y][z].pic==9){
-        player[x].score+=5;
-        std::cout<<"deculumn\n";
-        for(int i=0;i<10;i++)
-            pb[x][i][z].elm=1;
-            doEliminate(x);
-            doFall(x);
-            reverse=1;
-            std::cout<<"doFall\n";
-    }
-    else if(pb[x][y][z].pic==10){
-        player[x].score+=5;
-        std::cout<<"derow\n";
-        for(int i=0;i<10;i++)
-            pb[x][y][i].elm=1;
-        doEliminate(x);
-        doFall(x);
-        reverse=1;
-        std::cout<<"doFall\n";
-    }
-    else if(pb[x][y][z].pic==11){
-        pb[x][y][z].elm=1;
-        player[x].score+=10;
-        std::cout<<"desamecolor\n";
-        int t;
-        t=rand()%6+2;
-        for(int i=0;i<10;i++){
-            for(int j=0;j<10;j++){
-                if(pb[x][i][j].pic==t)
-                    pb[x][i][j].elm=1;
-            }
-        }
-        doEliminate(x);
-        doFall(x);
-        reverse=1;
-        std::cout<<"doFall\n";
     }
 
     myShow();
@@ -928,7 +1104,6 @@ void Game::doClicked(int n){
 void Game::doClicked2(int n){
     std::cout<<n<<"\n";
     int x=0,y=0,z=0;
-    int ly,uy,lz,uz;
     x=n/100%10;
 //    if(game_lock[0]==1)
 //        return;
@@ -939,7 +1114,7 @@ void Game::doClicked2(int n){
     if(player[1].open==0)
         return;
 
-    if(player[x].score>=point_for_win){
+    if(checkLose(1-x)==1||checkLose(x)==1||player[x].score>=point_for_win){
         game_over();
         return;
     }
@@ -950,77 +1125,22 @@ void Game::doClicked2(int n){
 
     y=n/10%10;
     z=n%10;
-    if(player[0].attack>player[0].attack_num&&player[1].open!=0){
-        player[0].attack-=player[0].attack_num;
-        doAttack(1);
-        myShow();
-    }
-    if(player[1].attack>player[1].attack_num&&player[0].open!=0){
-        player[1].attack-=player[1].attack_num;
-        doAttack(0);
-        myShow();
-    }
 
-
-    if(pb[x][y][z].pic>=2&&pb[x][y][z].pic<=7){
+    if((pb[x][y][z].pic%10)>=2&&(pb[x][y][z].pic%10)<=7){
+        while(player[0].attack>player[0].attack_num&&player[1].open!=0){
+            player[0].attack-=player[0].attack_num;
+            doAttack(1);
+            myShow();
+        }
+        while(player[1].attack>player[1].attack_num&&player[0].open!=0){
+            player[1].attack-=player[1].attack_num;
+            doAttack(0);
+            myShow();
+        }
         game_lock[x]=1;
         pb[x][y][z].click=1;
-        reverse=0;
+        reverse[x]=0;
         checkClick(x);
-    }
-    else if(pb[x][y][z].pic==8){
-        player[x].score+=5;
-        std::cout<<"dearound\n";
-        ly=(y<1?0:y-1);
-        lz=(z<1?0:z-1);
-        uy=(y>8?9:y+1);
-        uz=(z>8?9:z+1);
-        for(int i=ly;i<=uy;i++){
-            for(int j=lz;j<=uz;j++){
-                pb[x][i][j].elm=1;
-            }
-        }
-        doEliminate(x);
-        doFall(x);
-        reverse=1;
-        std::cout<<"doFall\n";
-    }
-    else if(pb[x][y][z].pic==9){
-        player[x].score+=5;
-        std::cout<<"deculumn\n";
-        for(int i=0;i<10;i++)
-            pb[x][i][z].elm=1;
-        doEliminate(x);
-        doFall(x);
-        reverse=1;
-        std::cout<<"doFall\n";
-    }
-    else if(pb[x][y][z].pic==10){
-        player[x].score+=5;
-        std::cout<<"derow\n";
-        for(int i=0;i<10;i++)
-            pb[x][y][i].elm=1;
-        doEliminate(x);
-        doFall(x);
-        reverse=1;
-        std::cout<<"doFall\n";
-    }
-    else if(pb[x][y][z].pic==11){
-        pb[x][y][z].elm=1;
-        player[x].score+=10;
-        std::cout<<"desamecolor\n";
-        int t;
-        t=rand()%6+2;
-        for(int i=0;i<10;i++){
-            for(int j=0;j<10;j++){
-                if(pb[x][i][j].pic==t)
-                    pb[x][i][j].elm=1;
-            }
-        }
-        doEliminate(x);
-        doFall(x);
-        reverse=1;
-        std::cout<<"doFall\n";
     }
 
     myShow();
@@ -1049,6 +1169,10 @@ void Game::on_pushbutton_one_player_clicked(){
     player[1].open=0;
 
     giveStartBlock(0);
+    pb[0][4][5].pic=2;
+    pb[0][5][6].pic=2;
+    pb[0][6][5].pic=32;
+    pb[0][7][5].pic=2;
     myShow();
 }
 

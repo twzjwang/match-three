@@ -20,7 +20,7 @@
 #include <math.h>
 #include <stdlib.h>
 
-#define point_for_win 10
+#define point_for_win 1000
 
 namespace Ui {
 class Game;
@@ -52,9 +52,13 @@ public:
 
     int checkLose(int x);//1:lose
 
+    void checkSpecialCase(int x);
+
     void resetClick(int x);
 
     void resetElm(int x);
+
+    void resetSpecialCase(int x);
 
     void doChange(int x1,int y1,int z1,int x2,int y2,int z2);
 
@@ -65,6 +69,14 @@ public:
     void doAttack(int x);
 
     void doAnimation(int x1,int y1,int z1,int x2,int y2,int z2,int type=0);
+
+    void de_around(int x,int y,int z);
+
+    void de_column(int x,int y,int z);
+
+    void de_row(int x,int y,int z);
+
+    void de_same_color(int x,int y,int z,int color);
 
     void autoRun(int x);
 
@@ -96,14 +108,14 @@ private:
     Ui::Game *ui;
     Block pb[2][10][10];
     Player player[2];
-    QPixmap pic[15];
+    QPixmap pic[41];
     QSignalMapper *signalMapper;
     QGridLayout *gridLayout;
     QPushButton *button[2][10][10];
     QPropertyAnimation *animation1, *animation2, *animation3;
     QParallelAnimationGroup *group[2],*group2;
     int game_lock[2];//0:unlocked 1:locked
-    int reverse;
+    int reverse[2];
 
 };
 
