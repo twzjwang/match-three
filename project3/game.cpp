@@ -264,15 +264,6 @@ void Game::myShow(){
         }
     }
 
-    if(checkLose(0)==1){
-        game_lock[0]=1;
-        game_lock[1]=1;
-    }
-    if(checkLose(0)==1){
-        game_lock[0]=1;
-        game_lock[1]=1;
-    }
-
     QString s;
 
     s.sprintf("%d",player[0].score);
@@ -502,6 +493,12 @@ void Game::checkClick(int x){
 
     else if(abs(y1-y2)+abs(z1-z2)>1){
         std::cout<<"cant change\n";
+        if(player[1].open==2){
+            resetClick(x);
+            game_lock[x]=0;
+            autoRun(1);
+            return;
+        }
         resetClick(x);
         game_lock[x]=0;
         return;
@@ -580,7 +577,12 @@ int Game::doFall(int x){
         }
         myShow();
     }
-
+    if(player[1].open==2&&reverse==1&&x==1){
+        resetClick(x);
+        game_lock[x]=0;
+        autoRun(1);
+        return 1;
+    }
     return 1;
 }
 
@@ -669,7 +671,7 @@ void Game::doAnimation(int x1,int y1,int z1,int x2,int y2,int z2,int type){
         p1->setIcon(pic[pb[x2][y2][z2].pic]);
         pb[x2][y2][z2].pic=0;
         myShow();
-        animation3->setDuration(100+10*z2);
+        animation3->setDuration(100);
         animation3->setStartValue(p2->geometry());
         animation3->setEndValue(p1->geometry());
         //group2->addAnimation(animation3);
@@ -680,7 +682,75 @@ void Game::doAnimation(int x1,int y1,int z1,int x2,int y2,int z2,int type){
     }
 }
 
+void Game::autoRun(int x=1){
+    std::cout<<"AutoRun\n";
+    resetClick(x);
+    QTime dieTime= QTime::currentTime().addSecs(1);
+    while( QTime::currentTime() < dieTime )
+    QCoreApplication::processEvents(QEventLoop::AllEvents, 100);
+    if(player[0].lose==1||player[0].lose==1)
+        return;
 
+    for(int i=0;i<10;i++){
+        for(int j=0;j<10;j++){
+            if(pb[1][i][j].pic>=8&&pb[1][i][j].pic<=11){
+                doClicked2(100+i*10+j);
+                return;
+            }
+        }
+    }
+
+    int t,s;
+    t=rand()%100+x*100;
+    s=rand()%4;
+    doClicked2(t);
+    if(s==0&&(t+10)<200)
+        doClicked2(t+10);
+    else if(s==1&&(t-10)>99)
+        doClicked2(t-10);
+    else if(s==2&&(t+1)<200)
+        doClicked2(t+1);
+    else if((t-1)>99)
+        doClicked2(t-1);
+    else
+        doClicked2(rand()%100+x*100);
+
+    //autoRun(x);
+}
+
+void Game::game_over(){
+    QString s;
+    if(player[0]>player[1])
+        s.sprintf("player 1 win");
+    else{
+        if(player[1].open==1)
+            s.sprintf("player 2 win");
+        else if(player[1].open==2)
+            s.sprintf("computer win");
+    }
+    ui->label_winner->setText(s);
+    ui->label_winner->setFont(QFont("Calibri",26));//style size
+    ui->label_winner->setAlignment(Qt::AlignCenter);//center
+    ui->label_winner->setStyleSheet("QLabel{color : white;}");//color
+
+    for(int i=0;i<10;i++){
+        for(int j=0;j<10;j++){
+            pb[0][i][j].pic=0;
+            pb[1][i][j].pic=0;
+        }
+    }
+    resetClick(0);
+    resetElm(0);
+    resetClick(1);
+    resetElm(1);
+
+    player[0].open=0;
+    player[1].open=0;
+    game_lock[0]=0;
+    game_lock[1]=0;
+
+    myShow();
+}
 
 void Game::endChange0(){
     int x=0;
@@ -710,10 +780,16 @@ void Game::endChange1(){
     else if(reverse==0){
         reverse=1;
         doReverse(1);
+
+    }
+    else if(player[1].open==2&&reverse==1){
+        autoRun();
+        return;
     }
     resetClick(x);
     myShow();
     game_lock[1]=0;
+
 }
 
 void Game::endFall0(){
@@ -740,8 +816,14 @@ void Game::endFall1(){
         doEliminate(x);
         doFall(x);
     }
-    else
+    else{
         game_lock[1]=0;
+        if(player[1].open==2&&reverse==1){
+            resetClick(x);
+            autoRun();
+            return;
+        }
+    }
 }
 
 //when bottun is clicked
@@ -750,17 +832,29 @@ void Game::doClicked(int n){
     int x=0,y=0,z=0;
     int ly,uy,lz,uz;
     x=n/100%10;
+    if(player[x].open!=1)
+        return;
     if(game_lock[x]==1)
         return;
+
+    if(player[x].score>=point_for_win){
+        game_over();
+        return;
+    }
+    else if(player[1-x].score>=point_for_win){
+        game_lock[x]=1;
+        return;
+    }
+
     y=n/10%10;
     z=n%10;
-    if(player[0].attack>10){
-        player[0].attack-=10;
+    if(player[0].attack>player[0].attack_num&&player[1].open!=0){
+        player[0].attack-=player[0].attack_num;
         doAttack(1);
         myShow();
     }
-    if(player[1].attack>10){
-        player[1].attack-=10;
+    if(player[1].attack>player[1].attack_num&&player[0].open!=0){
+        player[1].attack-=player[1].attack_num;
         doAttack(0);
         myShow();
     }
@@ -830,8 +924,110 @@ void Game::doClicked(int n){
     myShow();
 }
 
-void Game::on_pushbutton_one_player_clicked()
-{
+//when bottun is clicked
+void Game::doClicked2(int n){
+    std::cout<<n<<"\n";
+    int x=0,y=0,z=0;
+    int ly,uy,lz,uz;
+    x=n/100%10;
+//    if(game_lock[0]==1)
+//        return;
+    if(game_lock[1]==1){
+        std::cout<<"game_lock[1]==1\n";
+        return;
+    }
+    if(player[1].open==0)
+        return;
+
+    if(player[x].score>=point_for_win){
+        game_over();
+        return;
+    }
+    else if(player[1-x].score>=point_for_win){
+        game_lock[x]=1;
+        return;
+    }
+
+    y=n/10%10;
+    z=n%10;
+    if(player[0].attack>player[0].attack_num&&player[1].open!=0){
+        player[0].attack-=player[0].attack_num;
+        doAttack(1);
+        myShow();
+    }
+    if(player[1].attack>player[1].attack_num&&player[0].open!=0){
+        player[1].attack-=player[1].attack_num;
+        doAttack(0);
+        myShow();
+    }
+
+
+    if(pb[x][y][z].pic>=2&&pb[x][y][z].pic<=7){
+        game_lock[x]=1;
+        pb[x][y][z].click=1;
+        reverse=0;
+        checkClick(x);
+    }
+    else if(pb[x][y][z].pic==8){
+        player[x].score+=5;
+        std::cout<<"dearound\n";
+        ly=(y<1?0:y-1);
+        lz=(z<1?0:z-1);
+        uy=(y>8?9:y+1);
+        uz=(z>8?9:z+1);
+        for(int i=ly;i<=uy;i++){
+            for(int j=lz;j<=uz;j++){
+                pb[x][i][j].elm=1;
+            }
+        }
+        doEliminate(x);
+        doFall(x);
+        reverse=1;
+        std::cout<<"doFall\n";
+    }
+    else if(pb[x][y][z].pic==9){
+        player[x].score+=5;
+        std::cout<<"deculumn\n";
+        for(int i=0;i<10;i++)
+            pb[x][i][z].elm=1;
+        doEliminate(x);
+        doFall(x);
+        reverse=1;
+        std::cout<<"doFall\n";
+    }
+    else if(pb[x][y][z].pic==10){
+        player[x].score+=5;
+        std::cout<<"derow\n";
+        for(int i=0;i<10;i++)
+            pb[x][y][i].elm=1;
+        doEliminate(x);
+        doFall(x);
+        reverse=1;
+        std::cout<<"doFall\n";
+    }
+    else if(pb[x][y][z].pic==11){
+        pb[x][y][z].elm=1;
+        player[x].score+=10;
+        std::cout<<"desamecolor\n";
+        int t;
+        t=rand()%6+2;
+        for(int i=0;i<10;i++){
+            for(int j=0;j<10;j++){
+                if(pb[x][i][j].pic==t)
+                    pb[x][i][j].elm=1;
+            }
+        }
+        doEliminate(x);
+        doFall(x);
+        reverse=1;
+        std::cout<<"doFall\n";
+    }
+
+    myShow();
+}
+
+void Game::on_pushbutton_one_player_clicked(){
+    ui->label_winner->setText(0);
     if(game_lock[0]==1||game_lock[1]==1)
         return;
     for(int i=0;i<10;i++){
@@ -847,7 +1043,7 @@ void Game::on_pushbutton_one_player_clicked()
 
     player[0].score=0;
     player[0].attack=0;
-    player[0].open=0;
+    player[0].open=1;
     player[1].score=0;
     player[1].attack=0;
     player[1].open=0;
@@ -856,8 +1052,8 @@ void Game::on_pushbutton_one_player_clicked()
     myShow();
 }
 
-void Game::on_pushbutton_two_player_clicked()
-{
+void Game::on_pushbutton_two_player_clicked(){
+    ui->label_winner->setText(0);
     if(game_lock[0]==1||game_lock[1]==1)
         return;
     for(int i=0;i<10;i++){
@@ -873,11 +1069,60 @@ void Game::on_pushbutton_two_player_clicked()
 
     player[0].score=0;
     player[0].attack=0;
-    player[0].open=0;
+    player[0].open=1;
     player[1].score=0;
     player[1].attack=0;
-    player[1].open=0;
+    player[1].open=1;
 
     giveStartBlock(2);
     myShow();
 }
+
+void Game::on_pushbutton_com1_clicked(){
+    ui->label_winner->setText(0);
+    if(game_lock[0]==1||game_lock[1]==1)
+        return;
+    for(int i=0;i<10;i++){
+        for(int j=0;j<10;j++){
+            pb[0][i][j].pic=0;
+            pb[1][i][j].pic=0;
+        }
+    }
+    resetClick(0);
+    resetElm(0);
+    resetClick(1);
+    resetElm(1);
+
+    player[0].score=0;
+    player[0].attack=0;
+    player[0].open=1;
+    player[1].score=0;
+    player[1].attack=0;
+    player[1].open=2;
+
+    giveStartBlock(2);
+    myShow();
+
+    autoRun();
+}
+
+void Game::on_quit_clicked()
+{
+    ui->label_winner->setText(0);
+    for(int i=0;i<10;i++){
+        for(int j=0;j<10;j++){
+            pb[0][i][j].pic=0;
+            pb[1][i][j].pic=0;
+        }
+    }
+    resetClick(0);
+    resetElm(0);
+    resetClick(1);
+    resetElm(1);
+
+    player[0].open=0;
+    player[1].open=0;
+    game_lock[0]=1;
+    game_lock[1]=1;
+}
+

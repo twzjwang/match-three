@@ -12,12 +12,15 @@
 #include <QSignalMapper>
 #include <QPropertyAnimation>
 #include <QPixmap>
+#include <QThread>
 #include <QtCore>
 #include <iostream>
 #include <string>
 #include <time.h>
 #include <math.h>
 #include <stdlib.h>
+
+#define point_for_win 10
 
 namespace Ui {
 class Game;
@@ -63,6 +66,10 @@ public:
 
     void doAnimation(int x1,int y1,int z1,int x2,int y2,int z2,int type=0);
 
+    void autoRun(int x);
+
+    void game_over();
+
 private slots:
 
     void endChange0();
@@ -75,9 +82,15 @@ private slots:
 
     void doClicked(int n);//when bottun is clicked
 
+    void doClicked2(int n);
+
     void on_pushbutton_one_player_clicked();
 
     void on_pushbutton_two_player_clicked();
+
+    void on_pushbutton_com1_clicked();
+
+    void on_quit_clicked(); 
 
 private:
     Ui::Game *ui;
@@ -91,6 +104,7 @@ private:
     QParallelAnimationGroup *group[2],*group2;
     int game_lock[2];//0:unlocked 1:locked
     int reverse;
+
 };
 
 #endif // GAME_H
