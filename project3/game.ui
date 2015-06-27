@@ -2629,7 +2629,7 @@
     <string/>
    </property>
    <property name="pixmap">
-    <pixmap>../pic/background.jpg</pixmap>
+    <pixmap>pic/background.jpg</pixmap>
    </property>
    <property name="scaledContents">
     <bool>true</bool>

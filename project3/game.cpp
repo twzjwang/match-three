@@ -8,41 +8,45 @@ Game::Game(QWidget *parent) :
     ui->setupUi(this);
 
     srand((unsigned)time(NULL));
+
+    QPixmap background("../pic/background.jpg");
+    ui->background->setPixmap(background);
+
 {
-    QPixmap white("../pic/white.jpg");                          pic[1]=white;
-    QPixmap red("../pic/red.jpg");                              pic[2]=red;
-    QPixmap orange("../pic/orange.jpg");                        pic[3]=orange;
-    QPixmap yellow("../pic/yellow.jpg");                        pic[4]=yellow;
-    QPixmap green("../pic/green.jpg");                          pic[5]=green;
-    QPixmap blue("../pic/blue.jpg");                            pic[6]=blue;
-    QPixmap purple("../pic/purple.jpg");                        pic[7]=purple;
-    QPixmap black("../pic/black.jpg");                          pic[8]=black;
+        QPixmap white("../pic/white.jpg");                          pic[1]=white;
+        QPixmap red("../pic/red.jpg");                              pic[2]=red;
+        QPixmap orange("../pic/orange.jpg");                        pic[3]=orange;
+        QPixmap yellow("../pic/yellow.jpg");                        pic[4]=yellow;
+        QPixmap green("../pic/green.jpg");                          pic[5]=green;
+        QPixmap blue("../pic/blue.jpg");                            pic[6]=blue;
+        QPixmap purple("../pic/purple.jpg");                        pic[7]=purple;
+        QPixmap black("../pic/black.jpg");                          pic[8]=black;
 
-    QPixmap de_around_red("../pic/de_around_red.jpg");          pic[12]=de_around_red;
-    QPixmap de_around_orange("../pic/de_around_orange.jpg");    pic[13]=de_around_orange;
-    QPixmap de_around_yellow("../pic/de_around_yellow.jpg");    pic[14]=de_around_yellow;
-    QPixmap de_around_green("../pic/de_around_green.jpg");      pic[15]=de_around_green;
-    QPixmap de_around_blue("../pic/de_around_blue.jpg");        pic[16]=de_around_blue;
-    QPixmap de_around_purple("../pic/de_around_purple.jpg");    pic[17]=de_around_purple;
-    QPixmap de_around_black("../pic/de_around.jpg");            pic[18]=de_around_black;
+        QPixmap de_around_red("../pic/de_around_red.jpg");          pic[12]=de_around_red;
+        QPixmap de_around_orange("../pic/de_around_orange.jpg");    pic[13]=de_around_orange;
+        QPixmap de_around_yellow("../pic/de_around_yellow.jpg");    pic[14]=de_around_yellow;
+        QPixmap de_around_green("../pic/de_around_green.jpg");      pic[15]=de_around_green;
+        QPixmap de_around_blue("../pic/de_around_blue.jpg");        pic[16]=de_around_blue;
+        QPixmap de_around_purple("../pic/de_around_purple.jpg");    pic[17]=de_around_purple;
+        QPixmap de_around_black("../pic/de_around.jpg");            pic[18]=de_around_black;
 
-    QPixmap de_column_red("../pic/de_column_red.jpg");          pic[22]=de_column_red;
-    QPixmap de_column_orange("../pic/de_column_orange.jpg");    pic[23]=de_column_orange;
-    QPixmap de_column_yellow("../pic/de_column_yellow.jpg");    pic[24]=de_column_yellow;
-    QPixmap de_column_green("../pic/de_column_green.jpg");      pic[25]=de_column_green;
-    QPixmap de_column_blue("../pic/de_column_blue.jpg");        pic[26]=de_column_blue;
-    QPixmap de_column_purple("../pic/de_column_purple.jpg");    pic[27]=de_column_purple;
-    QPixmap de_column_black("../pic/de_column.jpg");            pic[28]=de_column_black;
+        QPixmap de_column_red("../pic/de_column_red.jpg");          pic[22]=de_column_red;
+        QPixmap de_column_orange("../pic/de_column_orange.jpg");    pic[23]=de_column_orange;
+        QPixmap de_column_yellow("../pic/de_column_yellow.jpg");    pic[24]=de_column_yellow;
+        QPixmap de_column_green("../pic/de_column_green.jpg");      pic[25]=de_column_green;
+        QPixmap de_column_blue("../pic/de_column_blue.jpg");        pic[26]=de_column_blue;
+        QPixmap de_column_purple("../pic/de_column_purple.jpg");    pic[27]=de_column_purple;
+        QPixmap de_column_black("../pic/de_column.jpg");            pic[28]=de_column_black;
 
-    QPixmap de_row_red("../pic/de_row_red.jpg");                pic[32]=de_row_red;
-    QPixmap de_row_orange("../pic/de_row_orange.jpg");          pic[33]=de_row_orange;
-    QPixmap de_row_yellow("../pic/de_row_yellow.jpg");          pic[34]=de_row_yellow;
-    QPixmap de_row_green("../pic/de_row_green.jpg");            pic[35]=de_row_green;
-    QPixmap de_row_blue("../pic/de_row_blue.jpg");              pic[36]=de_row_blue;
-    QPixmap de_row_purple("../pic/de_row_purple.jpg");          pic[37]=de_row_purple;
-    QPixmap de_row_black("../pic/de_row.jpg");                  pic[38]=de_row_black;
+        QPixmap de_row_red("../pic/de_row_red.jpg");                pic[32]=de_row_red;
+        QPixmap de_row_orange("../pic/de_row_orange.jpg");          pic[33]=de_row_orange;
+        QPixmap de_row_yellow("../pic/de_row_yellow.jpg");          pic[34]=de_row_yellow;
+        QPixmap de_row_green("../pic/de_row_green.jpg");            pic[35]=de_row_green;
+        QPixmap de_row_blue("../pic/de_row_blue.jpg");              pic[36]=de_row_blue;
+        QPixmap de_row_purple("../pic/de_row_purple.jpg");          pic[37]=de_row_purple;
+        QPixmap de_row_black("../pic/de_row.jpg");                  pic[38]=de_row_black;
 
-    QPixmap de_same_color("../pic/de_same_color.jpg");          pic[40]=de_same_color;
+        QPixmap de_same_color("../pic/de_same_color.jpg");          pic[40]=de_same_color;
 }
 
 
@@ -254,6 +258,7 @@ Game::Game(QWidget *parent) :
         for(int j=0;j<10;j++){
         connect(button[0][i][j], SIGNAL(clicked()), signalMapper, SLOT(map ()));
         signalMapper->setMapping (button[0][i][j],10*i+j);
+
         connect(button[1][i][j], SIGNAL(clicked()), signalMapper, SLOT(map ()));
         signalMapper->setMapping (button[1][i][j],100+10*i+j);
         }
@@ -343,7 +348,7 @@ void Game::Creat(int x, int y, int z, int p=0){
 //check if any block could be eliminated(yes:1 no:0)
 //if record_elm=1 record elm
 int Game::checkEliminate(int x, int record_elm=0){
-    std::cout<<"checkEliminate\n";
+    //std::cout<<"checkEliminate\n";
     int con;//number of contiune blocks
     int temp;
     int re=0;
@@ -364,11 +369,14 @@ int Game::checkEliminate(int x, int record_elm=0){
                     for(int k=1;k<=con;k++)
                         if(record_elm==1)pb[x][i][j-k].elm=1;
                     if(con>=5){
+                        checkSpecialCase(x);
                         pb[x][i][j-3].pic=40;
                         pb[x][i][j-3].elm=0;
                     }
                     else if(con>=4){
-                        pb[x][i][j-2].pic+=30;
+                        checkSpecialCase(x);
+                        checkSpecialCase(x);
+                        pb[x][i][j-2].pic=30+pb[x][i][j-2].pic%10;
                         pb[x][i][j-2].elm=0;
                     }
                     re=1;                    
@@ -382,11 +390,13 @@ int Game::checkEliminate(int x, int record_elm=0){
             for(int k=1;k<=con;k++)
                 if(record_elm==1)pb[x][i][10-k].elm=1;
             if(con>=5){
+                checkSpecialCase(x);
                 pb[x][i][7].pic=40;
                 pb[x][i][7].elm=0;
             }
             else if(con>=4){
-                pb[x][i][8].pic+=30;
+                checkSpecialCase(x);
+                pb[x][i][8].pic=30+pb[x][i][8].pic%10;
                 pb[x][i][8].elm=0;
             }
             re=1;
@@ -416,15 +426,17 @@ int Game::checkEliminate(int x, int record_elm=0){
                                 pb[x][i-k][j].elm=1;
                         }
                     if(con>=5){
+                        checkSpecialCase(x);
                         pb[x][i-3][j].pic=40;
                         pb[x][i-3][j].elm=0;
                     }
                     else if(con>=4){
-                        pb[x][i-2][j].pic+=20;
+                        checkSpecialCase(x);
+                        pb[x][i-2][j].pic=20+pb[x][i-2][j].pic%10;
                         pb[x][i-2][j].elm=0;
                     }
                     else if(s==1)
-                        pb[tx][ty][tz].pic+=10;
+                        pb[tx][ty][tz].pic=10+pb[x][i-2][j].pic%10;
                     re=1;
                     s=0;
                 }
@@ -444,37 +456,40 @@ int Game::checkEliminate(int x, int record_elm=0){
                         pb[x][10-k][j].elm=1;
                 }
             if(con>=5){
+                checkSpecialCase(x);
                 pb[x][7][j].pic=40;
                 pb[x][7][j].elm=0;
             }
             else if(con>=4){
-                pb[x][8][j].pic+=20;
+                checkSpecialCase(x);
+                pb[x][8][j].pic=20+pb[x][8][j].pic%10;
                 pb[x][8][j].elm=0;
             }
             else if(s==1)
-                pb[tx][ty][tz].pic+=10;
+                pb[tx][ty][tz].pic=10+pb[tx][ty][tz].pic%10;
             re=1;
 
         }
         con=1;
         s=0;
     }
-    for(int i=0;i<10;i++){
-        for(int j=0;j<10;j++){
-            if(pb[x][i][j].pic>10&&pb[x][i][j].elm==1){
-                if(pb[x][i][j].pic>=40){
-                    pb[x][i][j].special_case=4;
-                    pb[x][i][j].desamecol=0;
-                }
-                else if(pb[x][i][j].pic>30)
-                    pb[x][i][j].special_case=3;
-                else if(pb[x][i][j].pic>20)
-                    pb[x][i][j].special_case=2;
-                else if(pb[x][i][j].pic>10)
-                    pb[x][i][j].special_case=1;
-            }
-        }
-    }
+//    for(int i=0;i<10;i++){
+//        for(int j=0;j<10;j++){
+//            if(pb[x][i][j].pic>10&&pb[x][i][j].elm==1){
+//                if(pb[x][i][j].pic>=40){
+//                    pb[x][i][j].special_case=4;
+//                    pb[x][i][j].desamecol=0;
+//                }
+//                else if(pb[x][i][j].pic>30)
+//                    pb[x][i][j].special_case=3;
+//                else if(pb[x][i][j].pic>20)
+//                    pb[x][i][j].special_case=2;
+//                else if(pb[x][i][j].pic>10)
+//                    pb[x][i][j].special_case=1;
+//                re=1;
+//            }
+//        }
+//    }
     checkSpecialCase(x);
     return re;
 }
@@ -506,10 +521,10 @@ void Game::checkClick(int x){
                     x2=x;y2=i;z2=j;
                     count_clicked++;
                 }
-                else{
-                    resetClick(x);
-                    return;
-                }
+//                else{
+//                    resetClick(x);
+//                    return;
+//                }
 
             }
         }
@@ -579,7 +594,7 @@ int Game::checkLose(int x){
     int b=1;
     for(int i=0;i<10;i++){
         for(int j=0;j<10;j++){
-            if(pb[x][i][j].pic!=1)
+            if(pb[x][i][j].pic!=8)
                 b=0;
         }
     }
@@ -587,6 +602,25 @@ int Game::checkLose(int x){
 }
 
 void Game::checkSpecialCase(int x){
+    //std::cout<<"checkSpecialCase\n";
+    for(int i=0;i<10;i++){
+        for(int j=0;j<10;j++){
+            if(pb[x][i][j].pic>10&&pb[x][i][j].elm==1){
+                if(pb[x][i][j].pic>=40){
+                    pb[x][i][j].special_case=4;
+                    pb[x][i][j].desamecol=0;
+                }
+                else if(pb[x][i][j].pic>30)
+                    pb[x][i][j].special_case=3;
+                else if(pb[x][i][j].pic>20)
+                    pb[x][i][j].special_case=2;
+                else if(pb[x][i][j].pic>10)
+                    pb[x][i][j].special_case=1;
+
+            }
+        }
+    }
+
     for(int i=0;i<10;i++){
         for(int j=0;j<10;j++){
             if(pb[x][i][j].special_case==1&&pb[x][i][j].elm==1)
@@ -628,14 +662,14 @@ void Game::resetSpecialCase(int x){
 }
 
 void Game::doChange(int x1,int y1,int z1,int x2,int y2,int z2){
-    std::cout<<"change"<<x1<<" "<<y1<<" "<<z1<<" && "<<x2<<" "<<y2<<" "<<z2<<"\n";
+    //std::cout<<"change"<<x1<<" "<<y1<<" "<<z1<<" && "<<x2<<" "<<y2<<" "<<z2<<"\n";
     doAnimation(x1,y1,z1,x2,y2,z2);
     //resetClick(x1);
     myShow();
 }
 
 int Game::doFall(int x){
-    std::cout<<"doFall\n";
+    //std::cout<<"doFall\n";
     int b=0;//b=0 no falling block
     for(int i=0;i<10;i++){
         bool processed_pos[10]={0};//processed:1
@@ -655,7 +689,7 @@ int Game::doFall(int x){
 
         for(int j=9;j>=0;j--){            
             if(j!=from_pos[j]){
-                std::cout<<"dorow1-9\n";
+                //std::cout<<"dorow1-9\n";
                 b=1;
                 doAnimation(x,j,i,x,from_pos[j],i,1);
                 return 0;
@@ -663,7 +697,7 @@ int Game::doFall(int x){
             if(b==1||pb[x][0][i].pic==0){
                 Creat(x,0,i,0);
                 game_lock[x]=0;
-                b=1;
+                b=0;
             }
         }
         myShow();
@@ -707,12 +741,12 @@ void Game::doReverse(int x){
 
 void Game::doAttack(int x){
     int t,y,z;
+    if(checkLose(x)==1)
+        return;
     do{
         t=rand()%100;
         y=t/10%10;
-        z=t%10;
-        if(checkLose(x)==1)
-            return;
+        z=t%10;       
         std::cout<<x<<y<<z<<"\n";
     }while(pb[x][y][z].pic==8);
     pb[x][y][z].pic=8;
@@ -720,7 +754,7 @@ void Game::doAttack(int x){
 
 //type 0: change    1:fall  2: column 0
 void Game::doAnimation(int x1,int y1,int z1,int x2,int y2,int z2,int type){
-    std::cout<<" x1: "<<x1<<" y1: "<<y1<<" z1: "<<z1<<" x2: "<<x2<<" y2: "<<y2<<" z2: "<<z2<<" type: "<<type<<"\n";
+    //std::cout<<" x1: "<<x1<<" y1: "<<y1<<" z1: "<<z1<<" x2: "<<x2<<" y2: "<<y2<<" z2: "<<z2<<" type: "<<type<<"\n";
     //game_lock=1;
     QPushButton *p1,*p2;
     int temp;
@@ -730,7 +764,7 @@ void Game::doAnimation(int x1,int y1,int z1,int x2,int y2,int z2,int type){
 
 
     if(type<=0){
-        std::cout<<"type==0\n";
+        //std::cout<<"type==0\n";
         animation1 = new QPropertyAnimation(p1, "geometry");
         animation2 = new QPropertyAnimation(p2, "geometry");
         temp=pb[x1][y1][z1].pic;
@@ -754,7 +788,7 @@ void Game::doAnimation(int x1,int y1,int z1,int x2,int y2,int z2,int type){
         group[x1]->start();
     }
     else if(type==1){
-        std::cout<<"type==1\n";
+        //std::cout<<"type==1\n";
         animation3 = new QPropertyAnimation(p1, "geometry");
         if(pb[x2][y2][z2].pic==0){
             Creat(x2,y2,z2,0);
@@ -788,7 +822,7 @@ void Game::de_around(int x,int y,int z){
             pb[x][i][j].elm=1;
         }
     }
-    int b=0;
+//    int b=0;
     for(int i=0;i<10;i++){
         for(int j=0;j<10;j++){
             if(pb[x][i][j].pic>10&&pb[x][i][j].elm==1){
@@ -802,15 +836,15 @@ void Game::de_around(int x,int y,int z){
                     pb[x][i][j].special_case=2;
                 else if(pb[x][i][j].pic>10)
                     pb[x][i][j].special_case=1;
-                b=1;
+//                b=1;
             }
         }
     }
 //    if(b==1)
 //        checkSpecialCase(x);
-    doEliminate(x);
-    if(b==0)
-        doFall(x);
+//    doEliminate(x);
+//    if(b==0)
+//        doFall(x);
 }
 
 void Game::de_column(int x,int y,int z){
@@ -818,7 +852,7 @@ void Game::de_column(int x,int y,int z){
     std::cout<<"deculumn\n";
     for(y=0;y<10;y++)
         pb[x][y][z].elm=1;
-    int b=0;
+//    int b=0;
     for(int i=0;i<10;i++){
         for(int j=0;j<10;j++){
             if(pb[x][i][j].pic>10&&pb[x][i][j].elm==1){
@@ -832,15 +866,17 @@ void Game::de_column(int x,int y,int z){
                     pb[x][i][j].special_case=2;
                 else if(pb[x][i][j].pic>10)
                     pb[x][i][j].special_case=1;
-                b=1;
+//                b=1;
             }
         }
     }
 //    if(b==1)
 //        checkSpecialCase(x);
-    doEliminate(x);
-    if(b==0)
-        doFall(x);
+
+//    if(b==0){
+//        doEliminate(x);
+//        doFall(x);
+//    }
 }
 
 void Game::de_row(int x,int y,int z){
@@ -848,7 +884,7 @@ void Game::de_row(int x,int y,int z){
     std::cout<<"derow\n";
     for(z=0;z<10;z++)
         pb[x][y][z].elm=1;
-    int b=0;
+//    int b=0;
     for(int i=0;i<10;i++){
         for(int j=0;j<10;j++){
             if(pb[x][i][j].pic>10&&pb[x][i][j].elm==1){
@@ -862,16 +898,15 @@ void Game::de_row(int x,int y,int z){
                     pb[x][i][j].special_case=2;
                 else if(pb[x][i][j].pic>10)
                     pb[x][i][j].special_case=1;
-                b=1;
+//                b=1;
             }
         }
     }
 //    if(b==1)
 //        checkSpecialCase(x);
-    doEliminate(x);
-    if(b==0)
-        doFall(x);
-    std::cout<<"doFall\n";
+//    doEliminate(x);
+//    if(b==0)
+//        doFall(x);
 }
 
 void Game::de_same_color(int x,int y,int z,int color=0){
@@ -900,16 +935,15 @@ void Game::de_same_color(int x,int y,int z,int color=0){
                     pb[x][i][j].special_case=2;
                 else if(pb[x][i][j].pic>10)
                     pb[x][i][j].special_case=1;
-                b=1;
+//                b=1;
             }
         }
     }
 //    if(b==1)
 //        checkSpecialCase(x);
     doEliminate(x);
-    //if(b==0)
+    if(b==0)
         doFall(x);
-    std::cout<<"doFall\n";
 }
 
 
@@ -990,7 +1024,7 @@ void Game::endChange0(){
         doEliminate(x);
         doFall(x);
         reverse[0]=1;
-        std::cout<<"doFall\n";
+        //std::cout<<"doFall\n";
     }
     else if(reverse[0]==0){
         reverse[0]=1;
@@ -1008,7 +1042,7 @@ void Game::endChange1(){
         doEliminate(x);
         doFall(x);
         reverse[1]=1;
-        std::cout<<"doFall\n";
+        //std::cout<<"doFall\n";
     }
     else if(reverse[1]==0){
         reverse[1]=1;
@@ -1026,7 +1060,7 @@ void Game::endChange1(){
 }
 
 void Game::endFall0(){
-    std::cout<<"endFall 0\n";
+    //std::cout<<"endFall 0\n";
     int x=0;
     myShow();
     if(doFall(x)==0)
@@ -1040,7 +1074,7 @@ void Game::endFall0(){
 }
 
 void Game::endFall1(){
-    std::cout<<"endFall 1\n";
+    //std::cout<<"endFall 1\n";
     int x=1;
     myShow();
     if(doFall(x)==0)
@@ -1062,6 +1096,7 @@ void Game::endFall1(){
 //when bottun is clicked
 void Game::doClicked(int n){
     std::cout<<n<<"\n";
+    std::cout<<pb[0][7][6].pic<<"\n";
     int x=0,y=0,z=0;
     x=n/100%10;
     if(player[x].open!=1)
@@ -1169,10 +1204,7 @@ void Game::on_pushbutton_one_player_clicked(){
     player[1].open=0;
 
     giveStartBlock(0);
-    pb[0][4][5].pic=2;
-    pb[0][5][6].pic=2;
-    pb[0][6][5].pic=32;
-    pb[0][7][5].pic=2;
+
     myShow();
 }
 
