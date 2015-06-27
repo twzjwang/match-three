@@ -19,7 +19,10 @@ SOURCES += main.cpp\
 
 HEADERS  += game.h \
     block.h \
-    player.h
+    player.h \
+    player_player1.h \
+    player_player2.h \
+    player_computer.h
 
 FORMS    += game.ui \
     start.ui

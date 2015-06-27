@@ -1,8 +1,12 @@
 #ifndef GAME_H
 #define GAME_H
 
-#include <block.h>
-#include <player.h>
+#include "block.h"
+#include "player.h"
+#include "player_player1.h"
+#include "player_player2.h"
+#include "player_computer.h"
+
 #include <QObject>
 #include <QString>
 #include <QWidget>
@@ -20,7 +24,7 @@
 #include <math.h>
 #include <stdlib.h>
 
-#define point_for_win 1000
+#define point_for_win 100
 
 namespace Ui {
 class Game;
@@ -104,6 +108,10 @@ private slots:
 
     void on_quit_clicked(); 
 
+signals:
+
+    void quit(int high_star,int high_score);
+
 private:
     Ui::Game *ui;
     Block pb[2][10][10];
@@ -116,7 +124,8 @@ private:
     QParallelAnimationGroup *group[2],*group2;
     int game_lock[2];//0:unlocked 1:locked
     int reverse[2];
-
+    float move[2];
+    int high_star,high_score;
 };
 
 #endif // GAME_H

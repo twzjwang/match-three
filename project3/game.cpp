@@ -5,7 +5,7 @@ Game::Game(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::Game)
 {
-    ui->setupUi(this);
+    ui->setupUi(this);    
 
     srand((unsigned)time(NULL));
 
@@ -273,6 +273,7 @@ Game::Game(QWidget *parent) :
 
 Game::~Game()
 {
+    emit quit(high_star,high_score);
     delete ui;
 }
 
@@ -288,37 +289,58 @@ void Game::myShow(){
             button[1][i][j]->setIconSize(button[1][i][j]->size());
         }
     }
+    if(player[0].open==1&&player[1].open==0)
+        player[0].attack=0;
+    if(move[0]!=0)
+        player[0].score_per_move=(float)player[0].score/move[0];
+    if(move[1]!=0)
+        player[1].score_per_move=(float)player[1].score/move[1];
 
     QString s;
 
     s.sprintf("%d",player[0].score);
     ui->label_score_0->setText(s);//text
-    ui->label_score_0->setFont(QFont("Calibri",30));//style size
+    ui->label_score_0->setFont(QFont("Calibri",27));//style size
     ui->label_score_0->setAlignment(Qt::AlignCenter);//center
     ui->label_score_0->setStyleSheet("QLabel{color : white;}");//color
 
     s.sprintf("%d",player[1].score);
     ui->label_score_1->setText(s);//text
-    ui->label_score_1->setFont(QFont("Calibri",30));//style size
+    ui->label_score_1->setFont(QFont("Calibri",27));//style size
     ui->label_score_1->setAlignment(Qt::AlignCenter);//center
     ui->label_score_1->setStyleSheet("QLabel{color : white;}");//color
 
     s.sprintf("%d",player[0].attack);
     ui->label_attack_0->setText(s);//text
-    ui->label_attack_0->setFont(QFont("Calibri",30));//style size
+    ui->label_attack_0->setFont(QFont("Calibri",27));//style size
     ui->label_attack_0->setAlignment(Qt::AlignCenter);//center
     ui->label_attack_0->setStyleSheet("QLabel{color : white;}");//color
 
     s.sprintf("%d",player[1].attack);
     ui->label_attack_1->setText(s);//text
-    ui->label_attack_1->setFont(QFont("Calibri",30));//style size
+    ui->label_attack_1->setFont(QFont("Calibri",27));//style size
     ui->label_attack_1->setAlignment(Qt::AlignCenter);//center
     ui->label_attack_1->setStyleSheet("QLabel{color : white;}");//color
 
+    s.sprintf("%.2f",player[0].score_per_move);
+    ui->label_imf_num0->setText(s);//text
+    ui->label_imf_num0->setFont(QFont("Calibri",27));//style size
+    ui->label_imf_num0->setAlignment(Qt::AlignCenter);//center
+    ui->label_imf_num0->setStyleSheet("QLabel{color : white;}");//color
+
+    s.sprintf("%.2f",player[1].score_per_move);
+    ui->label_imf_num1->setText(s);//text
+    ui->label_imf_num1->setFont(QFont("Calibri",27));//style size
+    ui->label_imf_num1->setAlignment(Qt::AlignCenter);//center
+    ui->label_imf_num1->setStyleSheet("QLabel{color : white;}");//color
+
+    ui->label_imf0_2->hide();
+    ui->label_imf1_2->hide();
+    ui->label_imf0->show();
+    ui->label_imf1->show();
     show();
 }
 
-//
 void Game::giveStartBlock(int t){
     if(t!=0&&t!=1){
         for(int i=0;i<10;i++){
@@ -365,7 +387,7 @@ int Game::checkEliminate(int x, int record_elm=0){
             }
             else{
                 if(con>=3){
-                    std::cout<<"row: "<<con<<"\n";                              
+//                    std::cout<<"row: "<<con<<"\n";
                     for(int k=1;k<=con;k++)
                         if(record_elm==1)pb[x][i][j-k].elm=1;
                     if(con>=5){
@@ -386,7 +408,7 @@ int Game::checkEliminate(int x, int record_elm=0){
             temp=pb[x][i][j].pic%10;
         }
         if(con>=3){
-            std::cout<<"row: "<<con<<"\n";
+//            std::cout<<"row: "<<con<<"\n";
             for(int k=1;k<=con;k++)
                 if(record_elm==1)pb[x][i][10-k].elm=1;
             if(con>=5){
@@ -414,7 +436,7 @@ int Game::checkEliminate(int x, int record_elm=0){
             }
             else{
                 if(con>=3){
-                    std::cout<<"col: "<<con<<"\n";
+//                    std::cout<<"col: "<<con<<"\n";
                     for(int k=1;k<=con;k++)
                         if(record_elm==1){
                             if(pb[x][i-k][j].elm==1){
@@ -445,7 +467,7 @@ int Game::checkEliminate(int x, int record_elm=0){
             temp=pb[x][i][j].pic%10;
         }
         if(con>=3){
-            std::cout<<"col: "<<con<<"\n";
+//            std::cout<<"col: "<<con<<"\n";
             for(int k=1;k<=con;k++)
                 if(record_elm==1){
                     if(pb[x][10-k][j].elm==1){
@@ -529,21 +551,21 @@ void Game::checkClick(int x){
             }
         }
     }
-    std::cout<<"check"<<x1<<" "<<y1<<" "<<z1<<" && "<<x2<<" "<<y2<<" "<<z2<<"\n";
+//    std::cout<<"check"<<x1<<" "<<y1<<" "<<z1<<" && "<<x2<<" "<<y2<<" "<<z2<<"\n";
     if(count_clicked!=2){
-        std::cout<<"only one clicked\n";
+//        std::cout<<"only one clicked\n";
         game_lock[x]=0;
         return;
     }
     if(x1!=x2){
-        std::cout<<"x1!=x2\n";
+//        std::cout<<"x1!=x2\n";
         resetClick(x);
         game_lock[x]=0;
         return;
     }
 
     else if(abs(y1-y2)+abs(z1-z2)>1){
-        std::cout<<"cant change\n";
+//        std::cout<<"cant change\n";
         if(player[1].open==2){
             resetClick(x);
             game_lock[x]=0;
@@ -733,7 +755,7 @@ void Game::doReverse(int x){
             }
         }
     }
-    std::cout<<"check"<<x1<<" "<<y1<<" "<<z1<<" && "<<x2<<" "<<y2<<" "<<z2<<"\n";
+//    std::cout<<"check"<<x1<<" "<<y1<<" "<<z1<<" && "<<x2<<" "<<y2<<" "<<z2<<"\n";
     resetClick(x);
     resetSpecialCase(x);
     doAnimation(x1,y1,z1,x2,y2,z2);
@@ -747,7 +769,7 @@ void Game::doAttack(int x){
         t=rand()%100;
         y=t/10%10;
         z=t%10;       
-        std::cout<<x<<y<<z<<"\n";
+//        std::cout<<x<<y<<z<<"\n";
     }while(pb[x][y][z].pic==8);
     pb[x][y][z].pic=8;
 }
@@ -811,7 +833,7 @@ void Game::doAnimation(int x1,int y1,int z1,int x2,int y2,int z2,int type){
 void Game::de_around(int x,int y,int z){
     int ly,uy,lz,uz;
     player[x].score+=5;
-    std::cout<<"dearound\n";
+//    std::cout<<"dearound\n";
 
     ly=(y<1?0:y-1);
     lz=(z<1?0:z-1);
@@ -849,7 +871,7 @@ void Game::de_around(int x,int y,int z){
 
 void Game::de_column(int x,int y,int z){
     player[x].score+=5;
-    std::cout<<"deculumn\n";
+//    std::cout<<"deculumn\n";
     for(y=0;y<10;y++)
         pb[x][y][z].elm=1;
 //    int b=0;
@@ -881,7 +903,7 @@ void Game::de_column(int x,int y,int z){
 
 void Game::de_row(int x,int y,int z){
     player[x].score+=5;
-    std::cout<<"derow\n";
+//    std::cout<<"derow\n";
     for(z=0;z<10;z++)
         pb[x][y][z].elm=1;
 //    int b=0;
@@ -910,14 +932,15 @@ void Game::de_row(int x,int y,int z){
 }
 
 void Game::de_same_color(int x,int y,int z,int color=0){
+    move[x]+=0.5;
     pb[x][y][z].elm=1;
     player[x].score+=10;
     if(color==0)
         color=rand()%6+2;
-    std::cout<<"desamecolor\n";
+    //std::cout<<"desamecolor"<<color<<"\n";
     for(int i=0;i<10;i++){
         for(int j=0;j<10;j++){
-            if(pb[x][i][j].pic%10==color)
+            if(pb[x][i][j].pic%10==color||pb[x][i][j].pic==40)
                 pb[x][i][j].elm=1;
         }
     }
@@ -925,20 +948,21 @@ void Game::de_same_color(int x,int y,int z,int color=0){
     for(int i=0;i<10;i++){
         for(int j=0;j<10;j++){
             if(pb[x][i][j].pic>10&&pb[x][i][j].elm==1){
-                if(pb[x][i][j].pic>=40){
-                    pb[x][i][j].special_case=4;
-                    pb[x][i][j].desamecol=0;
-                }
-                else if(pb[x][i][j].pic>30)
+//                if(pb[x][i][j].pic>=40){
+//                    pb[x][i][j].special_case=4;
+//                    pb[x][i][j].desamecol=0;
+//                }
+                if(pb[x][i][j].pic>30&&pb[x][i][j].pic<30)
                     pb[x][i][j].special_case=3;
-                else if(pb[x][i][j].pic>20)
+                else if(pb[x][i][j].pic>20&&pb[x][i][j].pic<30)
                     pb[x][i][j].special_case=2;
-                else if(pb[x][i][j].pic>10)
+                else if(pb[x][i][j].pic>10&&pb[x][i][j].pic<30)
                     pb[x][i][j].special_case=1;
 //                b=1;
             }
         }
     }
+
 //    if(b==1)
 //        checkSpecialCase(x);
     doEliminate(x);
@@ -953,21 +977,19 @@ void Game::autoRun(int x=1){
     QTime dieTime= QTime::currentTime().addSecs(1);
     while( QTime::currentTime() < dieTime )
     QCoreApplication::processEvents(QEventLoop::AllEvents, 100);
-    if(player[0].lose==1||player[0].lose==1)
-        return;
-
+//    if(player[0].lose==1||player[1].lose==1)
+//        return;
+    int t,s;
+    t=rand()%100+x*100;
+    s=rand()%4;
     for(int i=0;i<10;i++){
         for(int j=0;j<10;j++){
-            if(pb[1][i][j].pic>=8&&pb[1][i][j].pic<=11){
-                doClicked2(100+i*10+j);
-                return;
+            if(pb[1][i][j].pic>=10){
+                t=10;
             }
         }
     }
 
-    int t,s;
-    t=rand()%100+x*100;
-    s=rand()%4;
     doClicked2(t);
     if(s==0&&(t+10)<200)
         doClicked2(t+10);
@@ -984,14 +1006,15 @@ void Game::autoRun(int x=1){
 }
 
 void Game::game_over(){
+    int star=0;
     QString s;
     if(player[0]>player[1])
-        s.sprintf("player 1 win");
+        s.sprintf("<-win");
     else{
         if(player[1].open==1)
-            s.sprintf("player 2 win");
+            s.sprintf("win->");
         else if(player[1].open==2)
-            s.sprintf("computer win");
+            s.sprintf("win->");
     }
     ui->label_winner->setText(s);
     ui->label_winner->setFont(QFont("Calibri",26));//style size
@@ -1015,11 +1038,38 @@ void Game::game_over(){
     game_lock[1]=0;
 
     myShow();
+
+    if(player[0].score_per_move>=15)         star=3;
+    else if(player[0].score_per_move>=9)    star=2;
+    else if(player[0].score_per_move>=3)    star=1;
+    else if(player[0].score_per_move<3)     star=0;
+    s.sprintf("%d",star);
+    ui->label_imf_num0->setText(s);//text
+    ui->label_imf_num0->setFont(QFont("Calibri",27));//style size
+    ui->label_imf_num0->setAlignment(Qt::AlignCenter);//center
+    ui->label_imf_num0->setStyleSheet("QLabel{color : white;}");//color
+    if(player[1].score_per_move>=15)         star=3;
+    else if(player[1].score_per_move>=9)    star=2;
+    else if(player[1].score_per_move>=3)    star=1;
+    else if(player[1].score_per_move<3)     star=0;
+    s.sprintf("%d",star);
+    ui->label_imf_num1->setText(s);//text
+    ui->label_imf_num1->setFont(QFont("Calibri",27));//style size
+    ui->label_imf_num1->setAlignment(Qt::AlignCenter);//center
+    ui->label_imf_num1->setStyleSheet("QLabel{color : white;}");//color
+
+    ui->label_imf0->hide();
+    ui->label_imf1->hide();
+    ui->label_imf0_2->show();
+    ui->label_imf1_2->show();
+    show();
+
 }
 
 void Game::endChange0(){    
     int x=0;
     if(checkEliminate(x,1)==1){
+        move[0]++;
         checkSpecialCase(0);
         doEliminate(x);
         doFall(x);
@@ -1038,6 +1088,7 @@ void Game::endChange0(){
 void Game::endChange1(){
     int x=1;
     if(checkEliminate(x,1)==1){
+        move[1]++;
         checkSpecialCase(1);
         doEliminate(x);
         doFall(x);
@@ -1095,8 +1146,7 @@ void Game::endFall1(){
 
 //when bottun is clicked
 void Game::doClicked(int n){
-    std::cout<<n<<"\n";
-    std::cout<<pb[0][7][6].pic<<"\n";
+//    std::cout<<n<<"\n";
     int x=0,y=0,z=0;
     x=n/100%10;
     if(player[x].open!=1)
@@ -1140,23 +1190,23 @@ void Game::doClicked2(int n){
     std::cout<<n<<"\n";
     int x=0,y=0,z=0;
     x=n/100%10;
-//    if(game_lock[0]==1)
+////    if(game_lock[0]==1)
+////        return;
+//    if(game_lock[1]==1){
+////        std::cout<<"game_lock[1]==1\n";
 //        return;
-    if(game_lock[1]==1){
-        std::cout<<"game_lock[1]==1\n";
-        return;
-    }
-    if(player[1].open==0)
-        return;
+//    }
+//    if(player[1].open==0)
+//        return;
 
-    if(checkLose(1-x)==1||checkLose(x)==1||player[x].score>=point_for_win){
-        game_over();
-        return;
-    }
-    else if(player[1-x].score>=point_for_win){
-        game_lock[x]=1;
-        return;
-    }
+//    if(checkLose(1-x)==1||checkLose(x)==1||player[x].score>=point_for_win){
+//        game_over();
+//        return;
+//    }
+//    else if(player[1-x].score>=point_for_win){
+//        game_lock[x]=1;
+//        return;
+//    }
 
     y=n/10%10;
     z=n%10;
@@ -1196,12 +1246,28 @@ void Game::on_pushbutton_one_player_clicked(){
     resetClick(1);
     resetElm(1);
 
+    QString s;
+    Player *p1;
+    p1 = new Player_player1;
+    s=p1->getName();
+
+    ui->label_name0->setText(s);//text
+    ui->label_name0->setFont(QFont("Calibri",30));//style size
+    ui->label_name0->setAlignment(Qt::AlignCenter);//center
+    ui->label_name0->setStyleSheet("QLabel{color : white;}");//color
+
+    ui->label_name1->setText(0);//text
+
     player[0].score=0;
     player[0].attack=0;
     player[0].open=1;
+    player[0].score_per_move=0;
+    move[0]=0;
     player[1].score=0;
     player[1].attack=0;
     player[1].open=0;
+    player[1].score_per_move=0;
+    move[1]=0;
 
     giveStartBlock(0);
 
@@ -1223,12 +1289,34 @@ void Game::on_pushbutton_two_player_clicked(){
     resetClick(1);
     resetElm(1);
 
+    QString s;
+    Player *p1,*p2;
+    p1 = new Player_player1;
+    s=p1->getName();
+
+    ui->label_name0->setText(s);//text
+    ui->label_name0->setFont(QFont("Calibri",30));//style size
+    ui->label_name0->setAlignment(Qt::AlignCenter);//center
+    ui->label_name0->setStyleSheet("QLabel{color : white;}");//color
+
+    p2 = new Player_player2;
+    s=p2->getName();
+
+    ui->label_name1->setText(s);//text
+    ui->label_name1->setFont(QFont("Calibri",30));//style size
+    ui->label_name1->setAlignment(Qt::AlignCenter);//center
+    ui->label_name1->setStyleSheet("QLabel{color : white;}");//color
+
     player[0].score=0;
     player[0].attack=0;
     player[0].open=1;
+    player[0].score_per_move=0;
+    move[0]=0;
     player[1].score=0;
     player[1].attack=0;
     player[1].open=1;
+    player[1].score_per_move=0;
+    move[1]=0;
 
     giveStartBlock(2);
     myShow();
@@ -1236,8 +1324,8 @@ void Game::on_pushbutton_two_player_clicked(){
 
 void Game::on_pushbutton_com1_clicked(){
     ui->label_winner->setText(0);
-    if(game_lock[0]==1||game_lock[1]==1)
-        return;
+//    if(game_lock[0]==1||game_lock[1]==1)
+//        return;
     for(int i=0;i<10;i++){
         for(int j=0;j<10;j++){
             pb[0][i][j].pic=0;
@@ -1248,37 +1336,66 @@ void Game::on_pushbutton_com1_clicked(){
     resetElm(0);
     resetClick(1);
     resetElm(1);
+
+    QString s;
+    Player *p1,*p2;
+    p1 = new Player_player1;
+    s=p1->getName();
+
+    ui->label_name0->setText(s);//text
+    ui->label_name0->setFont(QFont("Calibri",30));//style size
+    ui->label_name0->setAlignment(Qt::AlignCenter);//center
+    ui->label_name0->setStyleSheet("QLabel{color : white;}");//color
+
+    p2 = new Player_computer;
+    s=p2->getName();
+
+    ui->label_name1->setText(s);//text
+    ui->label_name1->setFont(QFont("Calibri",25));//style size
+    ui->label_name1->setAlignment(Qt::AlignCenter);//center
+    ui->label_name1->setStyleSheet("QLabel{color : white;}");//color
 
     player[0].score=0;
     player[0].attack=0;
     player[0].open=1;
+    player[0].score_per_move=0;
+    move[0]=0;
+
     player[1].score=0;
     player[1].attack=0;
     player[1].open=2;
+    player[1].score_per_move=0;
+    move[1]=1;
 
     giveStartBlock(2);
     myShow();
 
-    autoRun();
+    autoRun(1);
 }
 
 void Game::on_quit_clicked()
 {
-    ui->label_winner->setText(0);
-    for(int i=0;i<10;i++){
-        for(int j=0;j<10;j++){
-            pb[0][i][j].pic=0;
-            pb[1][i][j].pic=0;
-        }
-    }
-    resetClick(0);
-    resetElm(0);
-    resetClick(1);
-    resetElm(1);
+//    ui->label_winner->setText(0);
+//    for(int i=0;i<10;i++){
+//        for(int j=0;j<10;j++){
+//            pb[0][i][j].pic=0;
+//            pb[1][i][j].pic=0;
+//        }
+//    }
+//    resetClick(0);
+//    resetElm(0);
+//    resetClick(1);
+//    resetElm(1);
 
-    player[0].open=0;
-    player[1].open=0;
-    game_lock[0]=1;
-    game_lock[1]=1;
+//    player[0].open=0;
+//    player[1].open=0;
+//    game_lock[0]=1;
+//    game_lock[1]=1;
+
+//    emit quit(high_star,high_score);
 }
+
+//void Game::quit(int high_star,int high_score){
+//        emit quit(high_star,high_score);
+//}
 
