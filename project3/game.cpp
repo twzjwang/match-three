@@ -1353,7 +1353,7 @@ void Game::on_pushbutton_com1_clicked(){
     s=p2->getName();
 
     ui->label_name1->setText(s);//text
-    ui->label_name1->setFont(QFont("Calibri",25));//style size
+    ui->label_name1->setFont(QFont("Calibri",30));//style size
     ui->label_name1->setAlignment(Qt::AlignCenter);//center
     ui->label_name1->setStyleSheet("QLabel{color : white;}");//color
 

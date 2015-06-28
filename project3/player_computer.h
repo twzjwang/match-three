@@ -11,7 +11,7 @@ class Player_computer:public Player
         ~Player_computer(){}
 
         QString getName(){
-            name.sprintf("computer");
+            name.sprintf("bad AI");
             return name;
         }
 };

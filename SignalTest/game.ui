@@ -2690,7 +2690,7 @@
     </rect>
    </property>
    <property name="text">
-    <string>V.S. COM (LV1)</string>
+    <string>V.S. COM ( bad AI )</string>
    </property>
   </widget>
   <widget class="QLabel" name="label_attack_0">
